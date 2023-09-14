@@ -2,4 +2,4 @@
 Jason Cho
 IT202-007
 
-CS major, taking IT 202 to gain some experience with frontend/web dev
+I'm a CS major. I'm taking IT 202 to gain experience with front end/web dev
