@@ -14,6 +14,7 @@ function getTotal($arr) {
     }
     //TODO do rounding stuff here (round to two decimals i.e., 0.10, 0.01, 0.00)
     $total *= 100;
+    $total += 0.5;
     $total = (int) $total;
     $total /= 100;
     echo "The total is " . var_export($total, true) . (((int)($total * 100) % 10 == 0) ? "0" : "");
