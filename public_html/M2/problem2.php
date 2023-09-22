@@ -8,11 +8,13 @@ function getTotal($arr) {
     $total = 0.00;
     //note: use the $arr variable, don't directly touch $a1-$a4
     //TODO do adding here
+    // jyc24 9/22/23
     foreach ($arr as $num) {
         $total += $num;
     }
     //TODO do rounding stuff here (round to two decimals i.e., 0.10, 0.01, 0.00)
     $total *= 100;
+    $total += 0.5;
     $total = (int) $total;
     $total /= 100;
     echo "The total is " . var_export($total, true) . (((int)($total * 100) % 10 == 0) ? "0" : "");
