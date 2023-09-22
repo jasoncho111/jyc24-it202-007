@@ -11,7 +11,11 @@ function bePositive($arr) {
     //TODO use echo to output all of the values as positive (even if they were originally positive) and maintain the original datatype
     //hint: may want to use var_dump() or similar to show final data types
     foreach ($arr as $num) {
-        var_dump($num < 0 ? -$num : $num);
+        if (is_float($num) || is_int($num)) var_dump($num < 0 ? -$num : $num);
+        else if (is_string($num))
+        {
+            var_dump(((int) $num < 0) ? substr($num, 1) : $num);
+        }
     }
 }
 echo "Problem 3: Be Positive<br>";
