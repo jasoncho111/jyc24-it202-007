@@ -2,6 +2,6 @@
 echo "It works!";
 echo "<br><br>";
 echo "<a href=\"/M2/index.html\">Go to homework 2 problems</a><br><br>";
-echo "<a href=\"/M2/index.html\">Go to homework 3 problem</a><br><br>";
+echo "<a href=\"/M3/index.html\">Go to homework 3 problem</a><br><br>";
 
 ;?>
