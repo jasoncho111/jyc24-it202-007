@@ -8,13 +8,18 @@
         window.addEventListener("load", () => {
             console.log("loaded via javascript");
             //TODO: add any extra onload processing you may need here
-            updateCurrentPage("Test");
+            getCurrentSelection();
         });
         function getCurrentSelection() {
             setTimeout(() => {
                 //added this delay here as some solutions may require it to update properly (i.e., click code may complete before the navigation changes)
                 //TODO: add code for processing the current selection 
-                
+                let items = document.querySelectorAll("nav > ul > li > a");
+                for (let item of items) {
+                    item.addEventListener("click", () => {
+                        updateCurrentPage(item.innerHTML);
+                    });
+                }
                 //Note: likely you'll want to call updateCurrentPage towards the end
             }, 100);
         }
@@ -41,6 +46,9 @@
             text-transform: capitalize;
         }
 
+        h3 ~ ul, h3 ~ ul li{
+            list-style-type: "✓ ";
+        }
         /* Styling of my choice */
         h3 ~ ul {
             font-family: cursive;
