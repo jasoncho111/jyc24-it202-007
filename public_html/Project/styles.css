@@ -1,9 +1,9 @@
 .alert-success {
-    background-color: green
+    background-color: rgb(13, 164, 13);
 }
 
 .alert-warning {
-    background-color: yellow;
+    background-color: rgb(237, 237, 77);
 }
 
 .alert-danger {
@@ -11,7 +11,7 @@
 }
 
 .alert-info {
-    background-color: teal;
+    background-color: rgb(9, 152, 152);
 }
 
 
@@ -26,5 +26,4 @@ nav li:hover {background-color: lightskyblue;}
 input{border-radius: 10%;}
 body{
     background-color: lightcyan;
-    color: rgb(153, 0, 153);
 }
