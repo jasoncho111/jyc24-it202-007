@@ -31,7 +31,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     //TODO 3
     $hasError = false;
     if (empty($email)) {
-        flash("Email must not be empty");
+        flash("Username/email must not be empty");
         $hasError = true;
     }
     if (str_contains($email, "@")) {
@@ -95,7 +95,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                         flash("Invalid password");
                     }
                 } else {
-                    flash("Email not found");
+                    flash("Username/Email not found");
                 }
             }
         } catch (Exception $e) {
