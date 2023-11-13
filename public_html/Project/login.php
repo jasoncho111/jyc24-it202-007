@@ -19,6 +19,11 @@ require(__DIR__ . "/../../partials/nav.php");
 
         //TODO update clientside validation to check if it should
         //valid email or username
+        let email = form.email.value;
+        if (!email) {
+            flash("Username/email must not be empty");
+            return false;
+        }
         return true;
     }
 </script>

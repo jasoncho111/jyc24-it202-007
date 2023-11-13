@@ -123,13 +123,19 @@ $username = get_username();
     function validate(form) {
         let pw = form.newPassword.value;
         let con = form.confirmPassword.value;
+        let username = form.username.value;
+        const userRe = /^[a-z0-9_-]{3,16}$/;
         let isValid = true;
         //TODO add other client side validation....
 
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
         if (pw !== con) {
-            flash("Password and Confrim password must match", "warning");
+            flash("Password and Confirm password must match", "warning");
+            isValid = false;
+        }
+        if (!userRe.test(username)) {
+            flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
             isValid = false;
         }
         return isValid;

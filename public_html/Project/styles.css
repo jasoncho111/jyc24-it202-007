@@ -42,7 +42,7 @@ input{
     border-radius: 10%;
     padding-left: 2px;
 }
-input[type="submit"][value="Register"], input[type="submit"][value="Login"] {
+input[type="submit"][value="Register"], input[type="submit"][value="Login"], input[type="submit"][value="Update Profile"] {
     margin-left: 65px;
 }
 input[type="submit"][value="Toggle"] {
@@ -51,7 +51,8 @@ input[type="submit"][value="Toggle"] {
 
 table, th, td {
     border: 1px solid;
-  }
+}
+
 th, td {
     padding-top: 3px;
     padding-bottom: 3px;

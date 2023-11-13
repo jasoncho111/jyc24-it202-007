@@ -9,7 +9,7 @@ reset_session();
     </div>
     <div>
         <label for="username">Username</label>
-        <input type="text" name="username" required maxlength="30" />
+        <input type="text" id= "username" name="username" required maxlength="30" />
     </div>
     <div>
         <label for="pw">Password</label>
@@ -25,8 +25,22 @@ reset_session();
     function validate(form) {
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
+        let user = form.username.value;
+        let pw = form.password.value;
+        let conf = form.confirm.value;
 
-        return true;
+        const userRe = /^[a-z0-9_-]{3,16}$/;
+        let isValid = true;
+
+        if (pw !== con) {
+            flash("Password and confirm password must match", "warning");
+            isValid = false;
+        }
+        if (!userRe.test(username)) {
+            flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
+            isValid = false;
+        }
+        return isValid;
     }
 </script>
 <?php
