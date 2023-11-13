@@ -31,7 +31,10 @@ reset_session();
 
         const userRe = /^[a-z0-9_-]{3,16}$/;
         let isValid = true;
-
+        if (!pw) {
+            flash("Password field cannot be empty", "warning");
+            isValid = false;
+        }
         if (pw !== con) {
             flash("Password and confirm password must match", "warning");
             isValid = false;

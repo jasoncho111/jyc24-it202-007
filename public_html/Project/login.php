@@ -20,6 +20,12 @@ require(__DIR__ . "/../../partials/nav.php");
         //TODO update clientside validation to check if it should
         //valid email or username
         let email = form.email.value;
+        let pw = form.password.value;
+        
+        if (!pw) {
+            flash("Password field cannot be empty", "warning");
+            isValid = false;
+        }
         if (!email) {
             flash("Username/email must not be empty");
             return false;
