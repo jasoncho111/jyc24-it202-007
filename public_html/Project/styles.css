@@ -40,9 +40,7 @@ label {
 
 input{
     border-radius: 10%;
-}
-input[type="submit"] {
-    margin-left: 66px;
+    padding-left: 2px;
 }
 
 div {
