@@ -24,7 +24,7 @@ nav {
 nav li a{color: red; font-size: 22;}
 nav li:hover {background-color: lightskyblue;}
 
-form {
+#non-admin-form {
     margin-top: 10px;
     margin-bottom: 10px;
     padding-top: 10px;
@@ -44,6 +44,19 @@ input{
 }
 input[type="submit"][value="Register"], input[type="submit"][value="Login"] {
     margin-left: 65px;
+}
+input[type="submit"][value="Toggle"] {
+    margin-top: 5px;
+}
+
+table, th, td {
+    border: 1px solid;
+  }
+th, td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 div {
