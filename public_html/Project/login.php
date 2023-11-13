@@ -2,15 +2,24 @@
 require(__DIR__ . "/../../partials/nav.php");
 ?>
 <form id="non-admin-form" onsubmit="return validate(this)" method="POST">
-    <div>
-        <label for="email">Email/Username</label>
-        <input type="text" name="email" required />
-    </div>
-    <div>
-        <label for="pw">Password</label>
-        <input type="password" id="pw" name="password" required minlength="8" />
-    </div>
-    <input type="submit" value="Login" />
+    <table class="forms-table">
+        <tr>
+            <div>
+                <td><label for="email">Email/Username:</label></td>
+                <td><input type="text" name="email" required /></td>
+            </div>
+        </tr>
+        <tr>
+            <div>
+                <td><label for="pw">Password:</label></td>
+                <td><input type="password" id="pw" name="password" required minlength="8" /></td>
+            </div>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Login" /></td>
+        </tr>
+    </table>
 </form>
 <script>
     function validate(form) {
