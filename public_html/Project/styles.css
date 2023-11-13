@@ -23,7 +23,32 @@ nav {
     }
 nav li a{color: red; font-size: 22;}
 nav li:hover {background-color: lightskyblue;}
-input{border-radius: 10%;}
+
+form {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-color: black;
+    border-radius: 10px;
+    border-style: solid;
+}
+
+label {
+    margin-left: 5px;
+}
+
+input{
+    border-radius: 10%;
+}
+input[type="submit"] {
+    margin-left: 66px;
+}
+
+div {
+    margin: 2px;
+}
+
 body{
     background-color: lightcyan;
 }
