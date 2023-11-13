@@ -43,7 +43,7 @@ input{
     padding-left: 2px;
 }
 input[type="submit"][value="Register"], input[type="submit"][value="Login"] {
-    padding-left: 65px;
+    margin-left: 65px;
 }
 
 div {
