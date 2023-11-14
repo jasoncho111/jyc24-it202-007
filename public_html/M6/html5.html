@@ -36,6 +36,7 @@
     var left = false;
 
     // Properties for the target square
+    // jyc24, 11/13/23
     var targetX = [0, 0, 0];
     var targetY = [0, 0, 0];
     var targetLength = 25;
@@ -130,6 +131,7 @@
     }
 
     // Move the target square to a random position
+    // jyc24, 11/13/23
     function moveTarget() {
         //change 1- fixed the square spawning to only spawn within the map
         for (let i = 0; i < 3; i++) {
@@ -177,6 +179,7 @@
             x = canvas.width - sideLength;
         }
         // Collide with the target
+        // jyc24, 11/13/23
         for (let i = 0; i < 3; i++) {
             if (isWithin(targetX[i], x, x + sideLength) || isWithin(targetX[i] + targetLength, x, x + sideLength)) { // X
                 if (isWithin(targetY[i], y, y + sideLength) || isWithin(targetY[i] + targetLength, y, y + sideLength)) { // Y
@@ -198,6 +201,7 @@
         context.fillStyle = '#FF0000';
         context.fillRect(x, y, sideLength, sideLength);
         // Draw the target 
+        // jyc24, 11/13/23
         for (let i = 0; i < 3; i++) {
             context.fillStyle = currColor[i];
             context.fillRect(targetX[i], targetY[i], targetLength, targetLength);
