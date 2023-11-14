@@ -3,23 +3,36 @@ require(__DIR__ . "/../../partials/nav.php");
 reset_session();
 ?>
 <form id="non-admin-form" onsubmit="return validate(this)" method="POST">
-    <div>
-        <label for="email">Email</label>
-        <input type="email" name="email" required />
-    </div>
-    <div>
-        <label for="username">Username</label>
-        <input type="text" id= "username" name="username" required maxlength="30" />
-    </div>
-    <div>
-        <label for="pw">Password</label>
-        <input type="password" id="pw" name="password" required minlength="8" />
-    </div>
-    <div>
-        <label for="confirm">Confirm</label>
-        <input type="password" name="confirm" required minlength="8" />
-    </div>
-    <input type="submit" value="Register" />
+    <table class="forms-table">
+        <tr>
+            <div>
+                <td><label for="email">Email:</label></td>
+                <td><input type="email" name="email" required /></td>
+            </div>
+        </tr>
+        <tr>
+            <div>
+                <td><label for="username">Username:</label></td>
+                <td><input type="text" id= "username" name="username" required maxlength="30" /></td>
+            </div>
+        </tr>
+        <tr>
+            <div>
+                <td><label for="pw">Password:</label></td>
+                <td><input type="password" id="pw" name="password" required minlength="8" /></td>
+            </div>
+        </tr>
+        <tr>
+            <div>
+                <td><label for="confirm">Confirm:</label></td>
+                <td><input type="password" name="confirm" required minlength="8" /></td>
+            </div>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Register" /></td>
+        </tr>
+    </table>
 </form>
 <script>
     function validate(form) {

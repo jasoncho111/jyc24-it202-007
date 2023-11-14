@@ -42,9 +42,7 @@ input{
     border-radius: 10%;
     padding-left: 2px;
 }
-input[type="submit"][value="Register"], input[type="submit"][value="Login"], input[type="submit"][value="Update Profile"] {
-    margin-left: 65px;
-}
+
 input[type="submit"][value="Toggle"] {
     margin-top: 5px;
 }
@@ -58,6 +56,10 @@ th, td {
     padding-bottom: 3px;
     padding-left: 8px;
     padding-right: 8px;
+}
+
+.forms-table, .forms-table tr, .forms-table td{
+    border: hidden;
 }
 
 div {
