@@ -6,6 +6,44 @@ if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
     redirect("home.php");
 }
+
+if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"]) && isset($_POST["independent"]) && 
+    isset($_POST["un-member"]) && isset($_POST["population"]) && isset($_POST["is-real"])) {
+        $name = $_POST["name"];
+        $capital = $_POST["capital"];
+        $currency = $_POST["currency"];
+        $independent = $_POST["independent"];
+        $un = $_POST["un-member"];
+        $pop = $_POST["population"];
+        $real = $_POST["is-real"];
+
+        //validation
+        if(empty($name) || empty($capital) || empty($currency)) flash("All fields are reqiuired", "warning");
+        else if(!preg_match('/^[a-zA-Z][a-zA-Z\-\s]*$/', $name) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s]*$/', $capital) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s]*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
+        else if($un > 1 || $un < 0 || $independent < 0 || $independent > 1 || $real > 1 || $real < 0) flash("Independent, UN Member, and is real must have values between 0 and 1", "warning");
+        else if($pop < 0) flash("Population must be positive", "warning");
+        else { //validation passed
+            $db = getDB();
+            $stmt = $db->prepare("INSERT INTO Countries (country_name, capital, currency_name, is_independent, is_un_member, population, is_real, is_active) VALUES(:name, :capital, :currency, :independent, :un, :pop, :real, 1)");
+
+            $update = false;
+            try {
+                $stmt->execute([":name" => $name, ":capital" => $capital, ":currency" => $currency, ":independent" => $independent, ":un" => $un, ":pop" => $pop, ":real" => $real]);
+                flash("Successfully created new country '" . $name . "'", "success");
+            } catch (PDOException $e) {
+                if ($e->errorInfo[1] === 1062) {
+                    $update = true;
+                } else {
+                    flash(var_export($e->errorInfo, true), "danger");
+                }
+            }
+
+            if ($update) {
+                //$stmt = $db->prepare()
+                //UPDATE
+            }
+        }
+    }
 ?>
 
 <div class="container-fluid">
