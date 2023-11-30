@@ -2,6 +2,8 @@
 require(__DIR__ . "/../../partials/nav.php");
 ?>
 <h1>Home</h1>
+<p>This is the home page for the countries database and guessing game.</p>
+<br>
 <?php
 
 if (is_logged_in(true)) {
