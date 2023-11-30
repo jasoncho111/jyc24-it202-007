@@ -25,7 +25,7 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
         else if($pop < 0) flash("Population must be positive", "warning");
         else { //validation passed
             $db = getDB();
-            $stmt = $db->prepare("INSERT INTO Countries (country_name, capital, currency_name, is_independent, is_un_member, population, is_real, is_active) VALUES(:name, :capital, :currency, :independent, :un, :pop, :real, 1)");
+            $stmt = $db->prepare("INSERT INTO Countries (country_name, capital, currency_name, is_independent, is_un_member, population, is_real, from_api, is_active) VALUES(:name, :capital, :currency, :independent, :un, :pop, :real, 0, 1)");
 
             $update = false;
             try {

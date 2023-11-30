@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `Countries`
     `is_un_member` BOOLEAN,
     `population`    INT,
     `is_real` BOOLEAN DEFAULT TRUE,
+    `from_api` BOOLEAN,
     `is_active`  TINYINT(1) default 1,
     `created`    timestamp default current_timestamp,
     `modified`   timestamp default current_timestamp on update current_timestamp,
