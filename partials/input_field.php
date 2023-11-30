@@ -27,6 +27,9 @@
         <?php endif; ?>
         <?php if ($_label) : ?>
             <?php /* label field */ ?>
+            <?php if($_type === "radio") : ?>
+                <input style="margin-left: 7px" type="radio" name="<?php se($_name); ?>" id="<?php se($_id); ?>" value="<?php se($_value); ?>" <?php echo $_rules;?> />
+            <?php endif; ?>
             <label class="form-label" for="<?php se($_id); ?>"><?php se($_label); ?></label>
         <?php endif; ?>
 
