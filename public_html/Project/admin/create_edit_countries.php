@@ -19,7 +19,7 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
 
         //validation
         if(empty($name) || empty($capital) || empty($currency)) flash("All fields are reqiuired", "warning");
-        else if(!preg_match('/^[a-zA-Z][a-zA-Z\-\s]*$/', $name) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s]*$/', $capital) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s]*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
+        else if(!preg_match('/^[a-zA-Z][a-zA-Z\-\s\.]*$/', $name) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s\.]*$/', $capital) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s\.]*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
         else if($un > 1 || $un < 0 || $independent < 0 || $independent > 1 || $real > 1 || $real < 0) flash("Independent, UN Member, and is real must have values between 0 and 1", "warning");
         else if($pop < 0) flash("Population must be positive", "warning");
         else { //validation passed
@@ -39,8 +39,13 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
             }
 
             if ($update) {
-                //$stmt = $db->prepare()
-                //UPDATE
+                $stmt = $db->prepare("UPDATE Countries SET capital=:capital, currency_name=:currency, is_independent=:independent, is_un_member=:un, population=:pop, is_real=:real WHERE country_name=:name");
+                try {
+                    $stmt->execute([":name" => $name, ":capital" => $capital, ":currency" => $currency, ":independent" => $independent, ":un" => $un, ":pop" => $pop, ":real" => $real]);
+                    flash("Successfully updated existing country " . $name, "success");
+                } catch (PDOException $e) {
+                    flash(var_export($e->errorInfo, true), "danger");
+                }
             }
         }
     }
@@ -59,6 +64,7 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
         <?php render_input(["type" => "number", "id" => "un", "name" => "un-member", "label" => "Is UN Member (0 = false, 1 = true)", "rules" => ["min" => 0, "max" => 1, "required" => true], "value" => 1]) ?>
         <?php render_input(["type" => "number", "id" => "population", "name" => "population", "label" => "Population", "rules" => ["min" => 0, "max" => 10000000000, "required" => true]]) ?>
         <?php render_input(["type" => "number", "id" => "real", "name" => "is-real", "label" => "Is a real country (0 = false, 1 = true)", "rules" => ["min" => 0, "max" => 1, "required" => true], "value" => 1]) ?>
+        <?php render_input(["type" => "text", "id" => "lang", "name" => "lang", "label" => "Languages spoken (comma-separated list)"]) ?>
         <?php render_button(["text" => "Create Country", "type" => "submit", "color" => "primary"]) ?>
     </form>
 </div>
