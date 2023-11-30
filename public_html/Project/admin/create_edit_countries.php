@@ -7,6 +7,7 @@ if (!has_role("Admin")) {
     redirect("home.php");
 }
 
+$name = "";
 if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"]) && isset($_POST["independent"]) && 
     isset($_POST["un-member"]) && isset($_POST["population"]) && isset($_POST["is-real"])) {
         $name = $_POST["name"];
@@ -49,6 +50,29 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
             }
         }
     }
+$langs = "";
+if(isset($_POST["lang"]) && !empty($name)) {
+    $langs = $_POST["lang"];
+    if(!empty($langs) && !preg_match('/^[a-zA-Z]+(,[\s]?[a-zA-Z]+)*$/', $langs)) flash("Languages can only contain letters and must be separated by commas", "warning");
+    else {
+        $db = getDB();
+        $query = "INSERT INTO CountryLanguages(country_name, language) VALUES";
+        $langs = explode(",", $langs);
+        foreach($langs as $l) {
+            $query .= "(\"" . $name . "\", \"" . $l . "\"), ";
+        }
+        //truncate final comma
+        $query = substr($query, 0, strlen($query)-2);
+        $stmt = $db->prepare($query);
+        flash($query);
+        try {
+            $stmt->execute();
+            flash("Successfully inserted languages", "success");
+        } catch (PDOException $e) {
+            flash(var_export($e->errorInfo, true), "danger");
+        }
+    }
+}
 ?>
 
 <div class="container-fluid">
@@ -64,7 +88,7 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
         <?php render_input(["type" => "number", "id" => "un", "name" => "un-member", "label" => "Is UN Member (0 = false, 1 = true)", "rules" => ["min" => 0, "max" => 1, "required" => true], "value" => 1]) ?>
         <?php render_input(["type" => "number", "id" => "population", "name" => "population", "label" => "Population", "rules" => ["min" => 0, "max" => 10000000000, "required" => true]]) ?>
         <?php render_input(["type" => "number", "id" => "real", "name" => "is-real", "label" => "Is a real country (0 = false, 1 = true)", "rules" => ["min" => 0, "max" => 1, "required" => true], "value" => 1]) ?>
-        <?php render_input(["type" => "text", "id" => "lang", "name" => "lang", "label" => "Languages spoken (comma-separated list)"]) ?>
+        <?php render_input(["type" => "text", "id" => "lang", "name" => "lang", "label" => "Optional: Languages spoken (comma-separated list)"]) ?>
         <?php render_button(["text" => "Create Country", "type" => "submit", "color" => "primary"]) ?>
     </form>
 </div>
