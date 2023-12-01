@@ -4,10 +4,10 @@
     $_btn_type = se($data, "type", "button", false);
     $_btn_text = se($data, "text", "Button", false);
     $_btn_color = se($data, "color", "primary", false);
-    //TODO add support for onClick
+    $_onclick = se($data, "onclick", "", false);
     ?>
     <?php if ($_btn_type === "button") : ?>
-        <button class="btn btn-<?php se($_btn_color); ?>"><?php se($_btn_text); ?></button>
+        <button class="btn btn-<?php se($_btn_color); ?>" onclick="<?php se($_onclick);?>"><?php se($_btn_text); ?></button>
     <?php elseif ($_btn_type === "submit") : ?>
         <input type="submit" class="btn btn-<?php se($_btn_color); ?>" value="<?php se($_btn_text); ?>" />
     <?php endif; ?>

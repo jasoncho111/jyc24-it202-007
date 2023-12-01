@@ -13,26 +13,26 @@ if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) &
     $query .= " WHERE ";
     if(isset($_POST["name"]) && !empty($_POST["name"])) {
         $sname = se($_POST, "name", "", false);
-        $query .= "country_name LIKE :sname, ";
+        $query .= "country_name LIKE :sname AND ";
         $params[":sname"] = "%$sname%";
     }
     if(isset($_POST["capital"]) && !empty($_POST["capital"])) {
         $scap = se($_POST, "capital", "", false);
-        $query .= "capital LIKE :scap, ";
+        $query .= "capital LIKE :scap AND ";
         $params[":scap"] = "%$scap%";
     }
     if(isset($_POST["type"]) && count($_POST["type"]) == 1) {
         $real = $_POST["type"][0];
         $query .= "is_real=";
         if($real == "real") {
-            $query .= "1, ";
+            $query .= "1 AND ";
         }
         else {
-            $query .= "0, ";
+            $query .= "0 AND ";
         }
     }
 
-    $query = substr($query, 0, strlen($query) -2);
+    $query = substr($query, 0, strlen($query) -5);
 }
 if(isset($_POST["order"])) {
     $order = se($_POST, "order", "", false);
@@ -70,7 +70,9 @@ $table = ["data" => $data];
 
 <div class="containeer-fluid">
     <h1>Countries List</h1>
-    <?php render_button(["type" => "button", "text" => "Clear filters", "onclick" => "clearFilters()"]); ?>
+    <?php render_button(["type" => "button", "text" => "Clear filters", "onclick" => "clearFilters()", "color" => "secondary btn-sm"]); ?>
+    <br>
+    <br>
     <p>Filter by:</p>
     <form method="POST">
         <?php render_input(["type" => "search", "name" => "name", "label" => "Country Name", "placeholder" => "Name Filter", "value"=>$sname]);/*lazy value to check if form submitted, not ideal*/ ?>
@@ -89,7 +91,22 @@ $table = ["data" => $data];
 </div>
 
 <script>
-    
+    function clearFilters() {
+        let search = document.querySelectorAll("input[type=\"search\"]");
+        search.forEach(clearval);
+        let lim = document.querySelector("input[type=\"number\"]");
+        lim.value=10;
+        let rad = document.querySelector("input[value=\"ASC\"]").checked = true;
+        let cb = document.querySelectorAll("input[type=\"checkbox\"]");
+        cb.forEach(checkall);
+    }
+
+    function clearval(item) {
+        item.value="";
+    }
+    function checkall(item) {
+        item.checked = true;
+    }
 </script>
 
 <style>
