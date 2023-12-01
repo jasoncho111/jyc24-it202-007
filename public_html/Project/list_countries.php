@@ -48,7 +48,6 @@ if(isset($_POST["lim"])) {
     $slim = se($_POST, "lim", "", false);
 }
 $query .= " LIMIT $slim";
-flash($query);
 
 $data = [];
 if($slim < 1 || $slim > 100) flash("Limit filter must be between 1 and 100 inclusive", "warning");
