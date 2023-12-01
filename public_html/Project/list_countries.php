@@ -2,15 +2,20 @@
 require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
-$query = "SELECT id, country_name Country, capital Capital, population Population FROM Countries";
+$query = "SELECT id, country_name Country, capital Capital, population Population FROM Countries WHERE is_active=1 AND ";
 $sname = "";
 $scap = "";
 $slim = 10;
 $order = "ASC";
 $real = [];
+$inactive = [];
 $params = [];
+if(isset($_POST["inactive"]) && count($_POST["inactive"]) == 1) {
+    $inactive = $_POST["inactive"][0];
+    $query = substr($query, 0, strlen($query) -6);
+    $query .= "is_active AND ";
+}
 if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) && count($_POST["type"]) == 1)) {
-    $query .= " WHERE ";
     if(isset($_POST["name"]) && !empty($_POST["name"])) {
         $sname = se($_POST, "name", "", false);
         $query .= "country_name LIKE :sname AND ";
@@ -34,6 +39,7 @@ if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) &
 
     $query = substr($query, 0, strlen($query) -5);
 }
+
 if(isset($_POST["order"])) {
     $order = se($_POST, "order", "", false);
     $query .= " ORDER BY country_name $order";
@@ -85,26 +91,35 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <small>On no value checked, returns both real and fake countries.</small>
         <?php render_input(["type" => "checkbox", "name" => "type[]", "label" => "Include real countries", "value" => "real", "rules" => ($real == "real" || $real == [] ? ["checked" => true] : [])]); ?>
         <?php render_input(["type" => "checkbox", "name" => "type[]", "label" => "Include fake countries", "value" => "fake", "rules" => ($real == "fake" || $real == [] ? ["checked" => true] : [])]); ?>
+        <p>Advanced:</p>
+        <?php render_input(["type" => "checkbox", "name" => "inactive[]", "label" => "Include inactive records", "value" => "inactive", "rules" => ($inactive == "inactive" ? ["checked" => true] : [])]); ?>
         <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
     <?php render_table($table);?>
 </div>
 
 <script>
+    //resets all filters
     function clearFilters() {
+        //search filters set to empty
         let search = document.querySelectorAll("input[type=\"search\"]");
         search.forEach(clearval);
+        //limit set to 10
         let lim = document.querySelector("input[type=\"number\"]");
         lim.value=10;
-        let rad = document.querySelector("input[value=\"ASC\"]").checked = true;
-        let cb = document.querySelectorAll("input[type=\"checkbox\"]");
-        cb.forEach(checkall);
+        //default order is ascending
+        document.querySelector("input[value=\"ASC\"]").checked = true;
+        //both real and fake countries checked
+        let cb = document.querySelectorAll("input[name=\"type[]\"]");
+        cb.forEach(check);
+        //do not include inactive countries
+        document.querySelector("input[name=\"inactive[]\"]").checked = false;
     }
 
     function clearval(item) {
         item.value="";
     }
-    function checkall(item) {
+    function check(item) {
         item.checked = true;
     }
 </script>
