@@ -48,6 +48,7 @@ session_start();
             <li onclick="location.replace('<?php echo get_url('admin/create_edit_countries.php')?>');"><a href="<?php echo get_url('admin/create_edit_countries.php'); ?>">Create Countries</a></li>
         <?php endif; ?>
         <?php if (is_logged_in()) : ?>
+            <li onclick="location.replace('<?php echo get_url('list_countries.php')?>');"><a href="<?php echo get_url('list_countries.php'); ?>">Country List</a></li>
             <li onclick="location.replace('<?php echo get_url('logout.php')?>');"><a href="<?php echo get_url('logout.php'); ?>">Logout</a></li>
         <?php endif; ?>
     </ul>
