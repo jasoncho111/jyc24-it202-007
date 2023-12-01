@@ -2,7 +2,7 @@
 require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
-$query = "SELECT country_name Country, capital Capital, population Population FROM Countries";
+$query = "SELECT id, country_name Country, capital Capital, population Population FROM Countries";
 $sname = "";
 $scap = "";
 $slim = 10;
@@ -62,7 +62,7 @@ else {
         flash(var_export($e->errorInfo, true), "danger");
     }
 }
-$table = ["data" => $data];
+$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php"];
 ?>
 
 
