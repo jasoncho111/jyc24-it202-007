@@ -70,10 +70,10 @@
                                 <?php if ($_view_url) : ?>
                                     <a href="<?php se($_view_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?>" class="<?php se($_view_classes); ?>"><?php se($_view_label); ?></a>
                                 <?php endif; ?>
-                                <?php if ($_edit_url) : ?>
+                                <?php if ($_edit_url && has_role("Admin")) : ?>
                                     <a href="<?php se($_edit_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?>" class="<?php se($_edit_classes); ?>"><?php se($_edit_label); ?></a>
                                 <?php endif; ?>
-                                <?php if ($_delete_url) : ?>
+                                <?php if ($_delete_url && has_role("Admin")) : ?>
                                     <a href="<?php se($_delete_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?>" class="<?php se($_delete_classes); ?>"><?php se($_delete_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_post_self_form) : ?>
