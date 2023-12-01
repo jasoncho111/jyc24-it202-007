@@ -50,8 +50,10 @@ $ltable = ["data" => $languages];
     <br>
     <h4>Other actions</h4>
     <?php echo "<a href=" . get_url("list_countries.php") . " class=\"btn btn-primary\">Go back</a>" ?>
-    <?php echo "<a href=" . get_url("admin/edit_countries.php") . " class=\"btn btn-secondary\">Edit</a>" ?>
-    <?php echo "<a href=" . get_url("admin/delete_country.php") . " class=\"btn btn-danger\">Delete</a>" ?>
+    <?php if(has_role("Admin")) : ?>
+        <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id") . " class=\"btn btn-secondary\">Edit</a>" ?>
+        <?php echo "<a href=" . get_url("admin/delete_country.php?id=$id") . " class=\"btn btn-danger\">Delete</a>" ?>
+    <?php endif; ?>
 </div>
 
 <script>
