@@ -64,7 +64,6 @@ if(isset($_POST["lang"]) && !empty($name)) {
         //truncate final comma
         $query = substr($query, 0, strlen($query)-2);
         $stmt = $db->prepare($query);
-        flash($query);
         try {
             $stmt->execute();
             flash("Successfully inserted languages", "success");
