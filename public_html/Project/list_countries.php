@@ -2,6 +2,7 @@
 require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
+global $total;
 $query = "SELECT id, country_name Country, capital Capital, population Population FROM Countries WHERE is_active=1 AND ";
 $sname = "";
 $scap = "";
@@ -10,24 +11,25 @@ $order = "ASC";
 $real = [];
 $inactive = [];
 $params = [];
-if(isset($_POST["inactive"]) && count($_POST["inactive"]) == 1) {
-    $inactive = $_POST["inactive"][0];
+$page = se($_GET, "page", 1, false);
+if(isset($_GET["inactive"]) && count($_GET["inactive"]) == 1) {
+    $inactive = $_GET["inactive"][0];
     $query = substr($query, 0, strlen($query) -6);
     $query .= "is_active AND ";
 }
-if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) && count($_POST["type"]) == 1)) {
-    if(isset($_POST["name"]) && !empty($_POST["name"])) {
-        $sname = se($_POST, "name", "", false);
+if(isset($_GET["name"]) || isset($_GET["capital"]) || (isset($_GET["type"]) && count($_GET["type"]) == 1)) {
+    if(isset($_GET["name"]) && !empty($_GET["name"])) {
+        $sname = se($_GET, "name", "", false);
         $query .= "country_name LIKE :sname AND ";
         $params[":sname"] = "%$sname%";
     }
-    if(isset($_POST["capital"]) && !empty($_POST["capital"])) {
-        $scap = se($_POST, "capital", "", false);
+    if(isset($_GET["capital"]) && !empty($_GET["capital"])) {
+        $scap = se($_GET, "capital", "", false);
         $query .= "capital LIKE :scap AND ";
         $params[":scap"] = "%$scap%";
     }
-    if(isset($_POST["type"]) && count($_POST["type"]) == 1) {
-        $real = $_POST["type"][0];
+    if(isset($_GET["type"]) && count($_GET["type"]) == 1) {
+        $real = $_GET["type"][0];
         $query .= "is_real=";
         if($real == "real") {
             $query .= "1 AND ";
@@ -38,33 +40,55 @@ if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) &
     }
 }
 $query = substr($query, 0, strlen($query) -5);
-
-if(isset($_POST["order"])) {
-    $order = se($_POST, "order", "", false);
+//trailing " AND " removed
+//before order by clause, get $total
+$totalquery = "SELECT COUNT(id) total FROM Countries " . substr($query, strpos($query, "WHERE"));
+if(isset($_GET["order"])) {
+    $order = se($_GET, "order", "", false);
     $query .= " ORDER BY country_name $order";
 }
-if(isset($_POST["lim"])) {
-    $slim = se($_POST, "lim", "", false);
+if(isset($_GET["lim"])) {
+    $slim = se($_GET, "lim", "", false);
 }
-$query .= " LIMIT $slim";
+//generate limit offset for pagination
+$offset = ($page - 1) * $slim;
+$query .= " LIMIT $offset, $slim";
 
 $data = [];
 if($slim < 1 || $slim > 100) flash("Limit filter must be between 1 and 100 inclusive", "warning");
 else {
     $db = getDB();
-    $stmt = $db->prepare($query);
 
+    //totalquery already generated, get value for $total
+    $stmt = $db->prepare($totalquery);
     try {
         $stmt->execute($params);
         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if ($results) {
-            $data = $results;
-        }
-        else {
-            flash("No matches found", "warning");
+        if($results) {
+            $total = $results[0]["total"];
         }
     } catch (PDOException $e) {
         flash(var_export($e->errorInfo, true), "danger");
+    }
+
+    if($total > 0) {
+        $stmt = $db->prepare($query);
+
+        try {
+            $stmt->execute($params);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if ($results) {
+                $data = $results;
+            }
+            else {
+                flash("No matches found", "warning"); //should never enter this 
+            }
+        } catch (PDOException $e) {
+            flash(var_export($e->errorInfo, true), "danger");
+        }
+    }
+    else {
+        flash("No matches found", "warning");
     }
 }
 $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php"];
@@ -73,16 +97,16 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
 
 
 
-<div class="containeer-fluid">
+<div class="container-fluid">
     <h1>Countries List</h1>
     <?php render_button(["type" => "button", "text" => "Clear filters", "onclick" => "clearFilters()", "color" => "secondary btn-sm"]); ?>
     <br>
     <br>
     <p>Filter by:</p>
-    <form method="POST">
+    <form method="GET">
         <?php render_input(["type" => "search", "name" => "name", "label" => "Country Name", "placeholder" => "Name Filter", "value"=>$sname]);/*lazy value to check if form submitted, not ideal*/ ?>
         <?php render_input(["type" => "search", "name" => "capital", "label" => "Country Capital", "placeholder" => "Capital Filter", "value"=>$scap]); ?>
-        <?php render_input(["type" => "number", "name" => "lim", "label" => "Max Results", "placeholder" => "Limit", "value"=>$slim, "rules" => ["required" => true, "min" => 1, "max" => 100]]) ?>;
+        <?php render_input(["type" => "number", "name" => "lim", "label" => "Max results per page", "placeholder" => "Limit", "value"=>$slim, "rules" => ["required" => true, "min" => 1, "max" => 100]]) ?>;
         <p>Order by:</p>
         <?php render_input(["type" => "radio", "name" => "order", "label" => "Ascending", "value" => "ASC", "rules" => ($order == "ASC" ? ["checked" => true] : [])]); ?>
         <?php render_input(["type" => "radio", "name" => "order", "label" => "Descending", "value" => "DESC", "rules" => ($order == "DESC" ? ["checked" => true] : [])]); ?>
@@ -95,11 +119,9 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
     <?php render_table($table);?>
-    <small>Page</small><br>
-    <?php if(isset($_GET["page"]) && !($_GET["page"] == "1")) : ?>
-        <a href="?page=1">1</a>
-    <?php endif; ?>
-    <a href="?page=2">2</a>
+    <div class="row">
+        <?php include(__DIR__ . "/../../partials/pagination_nav.php"); ?>
+    </div>
 </div>
 
 <script>
