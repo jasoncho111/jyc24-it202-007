@@ -49,7 +49,7 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
                 }
             }
         }
-    }
+}
 $langs = "";
 if(isset($_POST["lang"]) && !empty($name)) {
     $langs = $_POST["lang"];
