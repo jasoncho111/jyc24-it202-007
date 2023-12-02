@@ -57,9 +57,11 @@ $ltable = ["data" => $languages];
     <h4>Other actions</h4>
     <?php echo "<a href=" . get_url("list_countries.php?$persisted") . " class=\"btn btn-primary\">Back To Country List</a>" ?>
     <?php if(has_role("Admin")) : ?>
-        <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id&from=view") . " class=\"btn btn-secondary\">Edit</a>" ?>
+        <br><br>
+        <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id") . " class=\"btn btn-secondary\">Edit</a>" ?>
         <?php echo "<a href=" . get_url("admin/delete_country.php?id=$id&from=view") . " class=\"btn btn-danger\">Delete</a>" ?>
     <?php endif; ?>
+    <br><br><br>
 </div>
 
 <script>
