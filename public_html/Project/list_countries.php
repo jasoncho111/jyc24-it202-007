@@ -95,6 +95,11 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
     <?php render_table($table);?>
+    <small>Page</small><br>
+    <?php if(isset($_GET["page"]) && !($_GET["page"] == "1")) : ?>
+        <a href="?page=1">1</a>
+    <?php endif; ?>
+    <a href="?page=2">2</a>
 </div>
 
 <script>
@@ -126,7 +131,7 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
 </script>
 
 <style>
-    p, small {margin-left: 7px;}
+    p, small, a {margin-left: 7px;}
 </style>
 
 <?php

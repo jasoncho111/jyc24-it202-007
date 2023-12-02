@@ -99,3 +99,7 @@ if(isset($_POST["deltype"])) {
 <style>
     .deltype {text-align: center;}
 </style>
+
+<?php
+require(__DIR__ . "/../../partials/flash.php");
+?>
