@@ -10,7 +10,7 @@ if($id < 1) {
 }
 
 $db = getDB();
-$stmt = $db->prepare("SELECT id ID, country_name Country, capital Capital, currency_name Currency, is_independent Independent, is_un_member `United Nations Member`, population Population, is_real `Is real`, from_api `From API`, is_active Active, created Created, modified Modified FROM Countries WHERE id=$id");
+$stmt = $db->prepare("SELECT id ID, country_name Country, capital Capital, currency_name Currency, is_independent Independent, is_un_member `United Nations Member`, population Population, is_real `Is real`, from_api `From API`, is_active `Is active`, created Created, modified Modified FROM Countries WHERE id=$id");
 $country = [];
 try {
     $stmt->execute();
@@ -49,10 +49,10 @@ $ltable = ["data" => $languages];
     <br>
     <br>
     <h4>Other actions</h4>
-    <?php echo "<a href=" . get_url("list_countries.php") . " class=\"btn btn-primary\">Go back</a>" ?>
+    <?php echo "<a href=" . get_url("list_countries.php") . " class=\"btn btn-primary\">Country List</a>" ?>
     <?php if(has_role("Admin")) : ?>
-        <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id") . " class=\"btn btn-secondary\">Edit</a>" ?>
-        <?php echo "<a href=" . get_url("admin/delete_country.php?id=$id") . " class=\"btn btn-danger\">Delete</a>" ?>
+        <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id&from=view") . " class=\"btn btn-secondary\">Edit</a>" ?>
+        <?php echo "<a href=" . get_url("admin/delete_country.php?id=$id&from=view") . " class=\"btn btn-danger\">Delete</a>" ?>
     <?php endif; ?>
 </div>
 

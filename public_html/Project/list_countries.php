@@ -36,9 +36,8 @@ if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) &
             $query .= "0 AND ";
         }
     }
-
-    $query = substr($query, 0, strlen($query) -5);
 }
+$query = substr($query, 0, strlen($query) -5);
 
 if(isset($_POST["order"])) {
     $order = se($_POST, "order", "", false);
@@ -99,6 +98,8 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
 </div>
 
 <script>
+    //capitalize id column
+    document.querySelector("th").innerHTML = "ID";
     //resets all filters
     function clearFilters() {
         //search filters set to empty
