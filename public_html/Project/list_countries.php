@@ -36,9 +36,8 @@ if(isset($_POST["name"]) || isset($_POST["capital"]) || (isset($_POST["type"]) &
             $query .= "0 AND ";
         }
     }
-
-    $query = substr($query, 0, strlen($query) -5);
 }
+$query = substr($query, 0, strlen($query) -5);
 
 if(isset($_POST["order"])) {
     $order = se($_POST, "order", "", false);
@@ -96,9 +95,16 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
     <?php render_table($table);?>
+    <small>Page</small><br>
+    <?php if(isset($_GET["page"]) && !($_GET["page"] == "1")) : ?>
+        <a href="?page=1">1</a>
+    <?php endif; ?>
+    <a href="?page=2">2</a>
 </div>
 
 <script>
+    //capitalize id column
+    document.querySelector("th").innerHTML = "ID";
     //resets all filters
     function clearFilters() {
         //search filters set to empty
@@ -125,7 +131,7 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
 </script>
 
 <style>
-    p, small {margin-left: 7px;}
+    p, small, a {margin-left: 7px;}
 </style>
 
 <?php
