@@ -8,13 +8,23 @@ if (!has_role("Admin")) {
 
 $id = -1;
 $from = "";
-if(isset($_GET["id"])) $id = se($_GET, "id", -1, false); 
+$persisted = "";
+if(isset($_GET["id"])) {
+    $id = se($_GET, "id", -1, false); 
+    //unset so we don't accidentally persist id
+    unset($_GET["id"]);
+}
 if($id < 1) {
     flash("Entity does not exist: ID = $id", "warning");
     redirect("list_countries.php");
 }
-
-if(!isset($_GET["from"])) $from = "list_countries.php";
+if(!isset($_GET["from"])) {
+    $from = "list_countries.php";
+    //get persisted queries
+    //only needed if coming from list_countries.php
+    $persisted = http_build_query($_GET);
+    $from .= "?" . $persisted;
+}
 else if($_GET["from"] == "view") $from = "view_country.php?id=$id";
 else if($_GET["from"] == "edit") $from = "admin/edit_countries.php?id=$id";
 
@@ -63,7 +73,7 @@ if(isset($_POST["deltype"])) {
             try {
                 $stmt->execute();
                 flash("Country entry successfully deleted", "success");
-                redirect("list_countries.php"); //on successful delete from DB, ID no longer exists so all prior pages would redirect to list_countries.php
+                redirect("list_countries.php?$persisted"); //on successful delete from DB, ID no longer exists so all prior pages would redirect to list_countries.php
             } catch (PDOException $e) {
                 flash(var_export($e->errorInfo, true), "danger");
             }
@@ -91,7 +101,7 @@ if(isset($_POST["deltype"])) {
     <br>
     <br>
     <h4>Other actions</h4>
-    <?php echo "<a href=" . get_url("list_countries.php") . " class=\"btn btn-primary\">Country List</a>" ?>
+    <?php echo "<a href=" . get_url("list_countries.php?$persisted") . " class=\"btn btn-primary\">Back To Country List</a>" ?>
     <?php echo "<a href=" . get_url("view_country.php?id=$id") . " class=\"btn btn-primary\">Detailed View</a>" ?>
     <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id") . " class=\"btn btn-secondary\">Edit</a>" ?>
 </div>
@@ -101,5 +111,5 @@ if(isset($_POST["deltype"])) {
 </style>
 
 <?php
-require(__DIR__ . "/../../partials/flash.php");
+require(__DIR__ . "/../../../partials/flash.php");
 ?>

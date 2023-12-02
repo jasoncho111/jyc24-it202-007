@@ -3,7 +3,13 @@ require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
 $id = -1;
-if(isset($_GET["id"])) $id = se($_GET, "id", -1, false);
+if(isset($_GET["id"])) {
+    $id = se($_GET, "id", -1, false);
+    //unset to prevent accidental persisting
+    unset($_GET["id"]);
+}
+
+$persisted = http_build_query($_GET);
 if($id < 1) {
     flash("Entity does not exist: ID = $id", "warning");
     redirect("list_countries.php");
@@ -49,7 +55,7 @@ $ltable = ["data" => $languages];
     <br>
     <br>
     <h4>Other actions</h4>
-    <?php echo "<a href=" . get_url("list_countries.php") . " class=\"btn btn-primary\">Country List</a>" ?>
+    <?php echo "<a href=" . get_url("list_countries.php?$persisted") . " class=\"btn btn-primary\">Back To Country List</a>" ?>
     <?php if(has_role("Admin")) : ?>
         <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id&from=view") . " class=\"btn btn-secondary\">Edit</a>" ?>
         <?php echo "<a href=" . get_url("admin/delete_country.php?id=$id&from=view") . " class=\"btn btn-danger\">Delete</a>" ?>
