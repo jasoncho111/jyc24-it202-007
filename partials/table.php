@@ -17,6 +17,8 @@
     $_delete_label = se($data, "delete_label", "Delete", false);
     $_delete_classes = se($data, "delete_classes", "btn btn-danger", false);
     $_primary_key_column = se($data, "primary_key", "id", false); // used for the url generation
+    //added value for persisting queries
+    $_persisted_queries = isset($data["persist"]) ? $data["persist"]: "";
     //TODO persist query params (future lesson)
     //
     // edge case that should consider a redesign
@@ -68,13 +70,13 @@
                         <?php if ($_has_atleast_one_url) : ?>
                             <td>
                                 <?php if ($_view_url) : ?>
-                                    <a href="<?php se($_view_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?>" class="<?php se($_view_classes); ?>"><?php se($_view_label); ?></a>
+                                    <a href="<?php se($_view_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="<?php se($_view_classes); ?>"><?php se($_view_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_edit_url && has_role("Admin")) : ?>
-                                    <a href="<?php se($_edit_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?>" class="<?php se($_edit_classes); ?>"><?php se($_edit_label); ?></a>
+                                    <a href="<?php se($_edit_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="<?php se($_edit_classes); ?>"><?php se($_edit_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_delete_url && has_role("Admin")) : ?>
-                                    <a href="<?php se($_delete_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?>" class="<?php se($_delete_classes); ?>"><?php se($_delete_label); ?></a>
+                                    <a href="<?php se($_delete_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="<?php se($_delete_classes); ?>"><?php se($_delete_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_post_self_form) : ?>
                                     <!-- TODO refactor -->

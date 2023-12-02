@@ -91,7 +91,10 @@ else {
         flash("No matches found", "warning");
     }
 }
-$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php"];
+//construct redirect location for delete for query persisting
+$queryparams = http_build_query($_GET);
+
+$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php", "persist" => $queryparams];
 ?>
 
 
