@@ -26,7 +26,9 @@ $country = [];
 $db = getDB();
 
 $name = "";
+$updatesuccess = false;
 //once form is submitted
+//countries table
 if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"]) && isset($_POST["independent"]) && 
     isset($_POST["un-member"]) && isset($_POST["population"]) && isset($_POST["is-real"])) {
         $name = $_POST["name"];
@@ -48,16 +50,84 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
             try {
                 $stmt->execute([":name" => $name, ":capital" => $capital, ":currency" => $currency, ":independent" => $independent, ":un" => $un, ":pop" => $pop, ":real" => $real, ":active" => $active]);
                 flash("Successfully updated country ID=" . $id, "success");
+                $updatesuccess = true;
             } catch (PDOException $e) {
                 flash(var_export($e->errorInfo, true), "danger");
             }
         }
 }
 
-if(isset($_POST["lang"])) {
+//countrylanguages table
+if(isset($_POST["lang"]) && $updatesuccess) {
     $lang = $_POST["lang"];
     if(empty($lang)) { //remove all instances from table
-        //TODO
+        $stmt = $db->prepare("DELETE FROM CountryLanguages WHERE country_name=:name");
+        try {
+            $stmt->execute([":name" => $name]);
+            flash("Successfully updated languages spoken for country id=$id, name=$name", "success");
+        } catch (PDOException $e) {
+            flash(var_export($e->errorInfo, true), "danger");
+        }
+    }
+    else if(!preg_match('/^[a-zA-Z]+(,[\s]?[a-zA-Z]+)*$/', $lang)) flash("Languages can only contain letters and must be separated by commas", "warning");
+    else {
+        $newlanglist = explode(",", $lang);
+        //remove any leading white space from new lang list languages
+        for ($i = 0; $i < count($newlanglist); $i++) $newlanglist[$i] = trim($newlanglist[$i]);
+        $newlanglist = array_unique($newlanglist);
+        $oldlanglist = [];
+        //get existing languages in db
+        $stmt = $db->prepare("SELECT language FROM CountryLanguages WHERE country_name=:name");
+        $languages = [];
+        try {
+            $stmt->execute([":name" => $name]);
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($result) $languages = $result;
+        } catch (PDOException $e) {
+            flash(var_export($e->errorInfo, true), "danger");
+        }
+
+        foreach($languages as $l) {
+            array_push($oldlanglist, $l["language"]);
+        }
+
+        //if new language does not already exist in table, add it to table
+        $query = "INSERT INTO CountryLanguages(country_name, language) VALUES"; 
+        foreach($newlanglist as $l) {
+            $l = trim($l);
+            if (!in_array($l, $oldlanglist)) $query .= "(\"" . $name . "\", \"" . $l . "\"), ";
+        }
+        //truncate final comma
+        if(str_ends_with($query, ", ")) {
+            $query = substr($query, 0, strlen($query)-2);
+            $stmt = $db->prepare($query);
+            try {
+                $stmt->execute();
+                flash("Successfully added new languages spoken for country id=$id, name=$name", "success");
+            } catch (PDOException $e) {
+                flash(var_export($e->errorInfo, true), "danger");
+            }
+        }
+        //if old language not in new language list, remove from table
+        if(!empty($oldlanglist)) {
+            $query = "DELETE FROM CountryLanguages WHERE country_name=:name AND (";
+            foreach($oldlanglist as $l) {
+                if(!in_array($l, $newlanglist)) {
+                    $query .= "language=\"$l\" OR ";
+                }
+            }
+            if(str_ends_with($query, " OR ")) $query = substr($query, 0, strlen($query)-4);
+            $query .= ")";
+            if(!str_ends_with($query, "()")) {
+                $stmt = $db->prepare($query);
+                try {
+                    $stmt->execute([":name" => $name]);
+                    flash("Successfully removed old languages spoken for country id=$id, name=$name", "success");
+                } catch (PDOException $e) {
+                    flash(var_export($e->errorInfo, true), "danger");
+                }
+            }
+        }
     }
 }
 
@@ -82,7 +152,7 @@ $languages = [];
 if(!$errorflag) {
     $cname = $country["country_name"];
 
-    $stmt = $db->prepare("SELECT language FROM CountryLanguages WHERE country_name=:cname");
+    $stmt = $db->prepare("SELECT language Language FROM CountryLanguages WHERE country_name=:cname");
     try {
         $stmt->execute([":cname" => $cname]);
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -96,7 +166,7 @@ if(!$errorflag) {
 $lstring = "";
 if(!empty($languages)) {
     foreach ($languages as $l) {
-        $lstring .= $l["language"] . ", ";
+        $lstring .= $l["Language"] . ", ";
     }
     $lstring = substr($lstring, 0, strlen($lstring) -2); //remove final comma
 }
@@ -114,7 +184,10 @@ if(!empty($languages)) {
         <?php render_input(["type" => "number", "id" => "population", "name" => "population", "label" => "Population", "value" => $country["population"], "rules" => ["min" => 0, "max" => 10000000000, "required" => true]]) ?>
         <?php render_input(["type" => "number", "id" => "real", "name" => "is-real", "label" => "Is a real country (0 = false, 1 = true)", "value" => $country["is_real"], "rules" => ["min" => 0, "max" => 1, "required" => true]]) ?>
         <?php render_input(["type" => "number", "id" => "active", "name" => "is-active", "label" => "Is active (0 = false, 1 = true)", "value" => $country["is_active"], "rules" => ["min" => 0, "max" => 1, "required" => true]]) ?>
-        <?php render_input(["type" => "text", "id" => "lang", "name" => "lang", "label" => "Optional: Languages spoken (comma-separated list)", "value" => $lstring]) ?>
+
+        <h4>Languages</h4>
+        <?php render_table(["data" => $languages]); ?>
+        <?php render_input(["type" => "text", "id" => "lang", "name" => "lang", "label" => "Languages spoken (comma-separated list)", "value" => $lstring]) ?>
         <?php render_button(["text" => "Update Country", "type" => "submit", "color" => "primary"]) ?>
     </form>
     <br>

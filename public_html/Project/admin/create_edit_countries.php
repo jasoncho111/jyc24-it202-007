@@ -59,8 +59,10 @@ if(isset($_POST["lang"]) && !empty($name)) {
         $db = getDB();
         $query = "INSERT INTO CountryLanguages(country_name, language) VALUES";
         $langs = explode(",", $langs);
+        //remove leading and trailing white space from new langs, remove duplicates
+        for ($i = 0; $i < count($langs); $i++) $langs[$i] = trim($langs[$i]); 
+        $langs = array_unique($langs);
         foreach($langs as $l) {
-            $l = trim($l);
             $query .= "(\"" . $name . "\", \"" . $l . "\"), ";
         }
         //truncate final comma
