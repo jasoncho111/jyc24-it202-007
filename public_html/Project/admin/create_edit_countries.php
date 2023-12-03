@@ -49,15 +49,19 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
                 }
             }
         }
-    }
+}
 $langs = "";
 if(isset($_POST["lang"]) && !empty($name)) {
     $langs = $_POST["lang"];
-    if(!empty($langs) && !preg_match('/^[a-zA-Z]+(,[\s]?[a-zA-Z]+)*$/', $langs)) flash("Languages can only contain letters and must be separated by commas", "warning");
+    if(empty($langs)) flash("No languages inserted"); //skip insert
+    else if(!preg_match('/^[a-zA-Z]+(,[\s]?[a-zA-Z]+)*$/', $langs)) flash("Languages can only contain letters and must be separated by commas", "warning");
     else {
         $db = getDB();
         $query = "INSERT INTO CountryLanguages(country_name, language) VALUES";
         $langs = explode(",", $langs);
+        //remove leading and trailing white space from new langs, remove duplicates
+        for ($i = 0; $i < count($langs); $i++) $langs[$i] = trim($langs[$i]); 
+        $langs = array_unique($langs);
         foreach($langs as $l) {
             $query .= "(\"" . $name . "\", \"" . $l . "\"), ";
         }

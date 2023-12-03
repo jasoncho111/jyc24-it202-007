@@ -117,9 +117,12 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <small>On no value checked, returns both real and fake countries.</small>
         <?php render_input(["type" => "checkbox", "name" => "type[]", "label" => "Include real countries", "value" => "real", "rules" => ($real == "real" || $real == [] ? ["checked" => true] : [])]); ?>
         <?php render_input(["type" => "checkbox", "name" => "type[]", "label" => "Include fake countries", "value" => "fake", "rules" => ($real == "fake" || $real == [] ? ["checked" => true] : [])]); ?>
-        <p>Advanced:</p>
-        <?php render_input(["type" => "checkbox", "name" => "inactive[]", "label" => "Include inactive records", "value" => "inactive", "rules" => ($inactive == "inactive" ? ["checked" => true] : [])]); ?>
-        <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
+        <!-- Only admins should see inactive countries -->
+        <?php if(has_role("Admin")) : ?>
+            <p>Advanced:</p>
+            <?php render_input(["type" => "checkbox", "name" => "inactive[]", "label" => "Include inactive records", "value" => "inactive", "rules" => ($inactive == "inactive" ? ["checked" => true] : [])]); ?>
+        <?php endif; ?>
+            <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
     <?php render_table($table);?>
     <div class="row">
