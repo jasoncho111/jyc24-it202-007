@@ -52,25 +52,56 @@ if(isset($_POST["name"]) && isset($_POST["offset"])) {
                     array_push($namelist, $country["cname"]);
                 }
 
+                //Delete all entries, insert all new entries:
+                //TODO: Keep country ids constant
+
+                $query = "DELETE FROM Countries WHERE ";
+                $languagequery = "DELETE FROM CountryLanguages WHERE ";
+                foreach($records as $country) {
+                    $name = $country["name"];
+                    if(in_array($name, $namelist)) {
+                        $query .= "country_name=\"$name\" OR ";
+                        $languagequery .= "country_name=\"$name\" OR ";
+                    }
+                }
+
+                if(str_ends_with($query, " OR ")) $query = substr($query, 0, strlen($query) -4);
+                if(str_ends_with($languagequery, " OR ")) $languagequery = substr($languagequery, 0, strlen($languagequery) -4);
+
+                if(!str_ends_with($languagequery, "WHERE ")) {
+                    $stmt = $db->prepare($languagequery);
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $e) {
+                        flash(var_export($e->errorInfo, true), "danger");
+                    }
+                }
+
+                if(!str_ends_with($query, "WHERE ")) {
+                    $stmt = $db->prepare($query);
+                    try {
+                        $stmt->execute();
+                    } catch (PDOException $e) {
+                        flash(var_export($e->errorInfo, true), "danger");
+                    }
+                }
                 //for all API countries not in DB list, insert new value into table
                 $query = "INSERT INTO Countries(country_name, capital, currency_name, is_independent, is_un_member, population, from_api, is_active) VALUES";
                 $languagequery = "INSERT INTO CountryLanguages(country_name, language) VALUES";
                 foreach($records as $country) {
                     $name = $country["name"];
-                    if(!in_array($name, $namelist)) {
-                        $capital = $country["capital"];
-                        $currency = $country["currency"];
-                        $independent = $country["independent"];
-                        $un = $country["un"];
-                        $pop = $country["population"];
-                        $langs = $country["languages"];
+                    $capital = $country["capital"];
+                    $currency = $country["currency"];
+                    $independent = $country["independent"];
+                    $un = $country["un"];
+                    $pop = $country["population"];
+                    $langs = $country["languages"];
 
-                        $query .= "('$name', '$capital', '$currency', $independent, $un, $pop, 1, 1), ";
+                    $query .= "(\"$name\", \"$capital\", \"$currency\", $independent, $un, $pop, 1, 1), ";
 
-                        //insert languages
-                        foreach($langs as $lang) {
-                            $languagequery .= "('$name', '" . $lang["name"] . "'), ";
-                        }
+                    //insert languages
+                    foreach($langs as $lang) {
+                        $languagequery .= "(\"$name\", '" . $lang["name"] . "'), ";
                     }
                 }
                 //remove final comma
@@ -99,6 +130,19 @@ if(isset($_POST["name"]) && isset($_POST["offset"])) {
                         flash(var_export($e->errorInfo, true), "danger");
                     }
                 }
+
+                //clean up records for the rendered table
+                $ltable = [];
+                for ($i = 0; $i < count($records); $i++) {
+                    $name = $records[$i]["name"];
+                    $langs = $records[$i]["languages"];
+                    unset($records[$i]["languages"]);
+                    foreach($langs as $l) {
+                        $entry["country"] = $name;
+                        $entry["language"] = $l["name"];
+                        array_push($ltable, $entry);
+                    }
+                }
             }
         }
     }
@@ -119,6 +163,9 @@ if(isset($_POST["name"]) && isset($_POST["offset"])) {
     <?php if(!empty($records)) : ?>
         <h4>Records pulled from API</h4>
         <?php render_table(["data" => $records]); ?>
+        <br>
+        <h5>Languages</h5>
+        <?php render_table(["data" => $ltable]); ?>
     <?php endif; ?>
 </div>
 
@@ -134,8 +181,20 @@ if(isset($_POST["name"]) && isset($_POST["offset"])) {
     let heads = document.querySelectorAll("th");
     for (let i = 0; i < heads.length; i++) {
         let text = heads[i].innerHTML;
-        if(text == "un") heads[i].innerHTML = toUpperCase(text);
+        if (text == "un") heads[i].innerHTML = "UN Member";
         else heads[i].innerHTML = capitalizeFirstLetter(text);
+    }
+
+    //replace 1 and 0 with true and false in table
+    let d = document.querySelectorAll("td");
+    let rlen = 6;
+    let nrow = d.length / rlen;
+    let ind = [3, 4];
+    for(let i = 0; i < nrow; i++) {
+        for(let j = 0; j < ind.length; j++) {
+            if(d[ind[j] + i*rlen].innerHTML == 1) d[ind[j] + i*rlen].innerHTML = "True";
+            else if(d[ind[j] + i*rlen].innerHTML == 0) d[ind[j] + i*rlen].innerHTML = "False";
+        }
     }
 
 </script>
