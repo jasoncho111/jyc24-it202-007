@@ -27,6 +27,8 @@ require(__DIR__ . "/render_functions.php");
 
 require(__DIR__ . "/api_helper.php");
 
+require(__DIR__ . "/map_api_country_data.php");
+
 //redirect
 function redirect($path)
 { //header headache
