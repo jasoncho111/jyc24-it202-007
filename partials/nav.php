@@ -46,6 +46,7 @@ session_start();
             <li onclick="location.replace('<?php echo get_url('admin/list_roles.php')?>');"><a href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
             <li onclick="location.replace('<?php echo get_url('admin/assign_roles.php')?>');"><a href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
             <li onclick="location.replace('<?php echo get_url('admin/create_edit_countries.php')?>');"><a href="<?php echo get_url('admin/create_edit_countries.php'); ?>">Create Countries</a></li>
+            <li onclick="location.replace('<?php echo get_url('admin/api_pull_index.php')?>');"><a href="<?php echo get_url('admin/api_pull_index.php'); ?>">API Manual Pull</a></li>
         <?php endif; ?>
         <?php if (is_logged_in()) : ?>
             <li onclick="location.replace('<?php echo get_url('list_countries.php')?>');"><a href="<?php echo get_url('list_countries.php'); ?>">Country List</a></li>

@@ -19,8 +19,8 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
         $real = $_POST["is-real"];
 
         //validation
-        if(empty($name) || empty($capital) || empty($currency)) flash("All fields are reqiuired", "warning");
-        else if(!preg_match('/^[a-zA-Z][a-zA-Z\-\s\.]*$/', $name) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s\.]*$/', $capital) || !preg_match('/^[a-zA-Z][a-zA-Z\-\s\.]*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
+        if(empty($name) || empty($capital) || empty($currency)) flash("All fields are required", "warning");
+        else if(!preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $name) || !preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $capital) || !preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
         else if($un > 1 || $un < 0 || $independent < 0 || $independent > 1 || $real > 1 || $real < 0) flash("Independent, UN Member, and is real must have values between 0 and 1", "warning");
         else if($pop < 0) flash("Population must be positive", "warning");
         else { //validation passed
