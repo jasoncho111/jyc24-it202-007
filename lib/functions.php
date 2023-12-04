@@ -27,8 +27,6 @@ require(__DIR__ . "/render_functions.php");
 
 require(__DIR__ . "/api_helper.php");
 
-require(__DIR__ . "/load_api_keys.php");
-
 //redirect
 function redirect($path)
 { //header headache

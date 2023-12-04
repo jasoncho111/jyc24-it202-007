@@ -1,5 +1,5 @@
 <?php 
-$env_keys = ["CAT_API_KEY"];
+$env_keys = ["COUNTRY_API_KEY"];
 $ini = @parse_ini_file(".env");
 
 $API_KEYS = [];
