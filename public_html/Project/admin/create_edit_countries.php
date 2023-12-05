@@ -18,7 +18,8 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
         $pop = $_POST["population"];
         $real = $_POST["is-real"];
 
-        //validation
+        //form validation
+        //jyc24 - 12/4/23
         if(empty($name) || empty($capital) || empty($currency)) flash("All fields are required", "warning");
         else if(!preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $name) || !preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?|[,][\s]?)[a-zA-Z]+[\.]?)*$/', $capital) || !preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
         else if($un > 1 || $un < 0 || $independent < 0 || $independent > 1 || $real > 1 || $real < 0) flash("Independent, UN Member, and is real must have values between 0 and 1", "warning");

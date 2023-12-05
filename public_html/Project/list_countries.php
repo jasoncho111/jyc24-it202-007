@@ -3,7 +3,7 @@ require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
 global $total;
-$query = "SELECT id, country_name Country, capital Capital, population Population FROM Countries WHERE is_active=1 AND ";
+$query = "SELECT id, country_name Country, capital Capital, population Population, from_api `From API` FROM Countries WHERE is_active=1 AND ";
 $sname = "";
 $scap = "";
 $slim = 10;
