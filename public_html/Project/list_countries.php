@@ -3,6 +3,8 @@ require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
 global $total;
+//SELECT STATEMENT FOR COUNTRY ASSOCIATION 
+//SELECT C.country_name, V.userid FROM `Countries` C LEFT JOIN `CountriesVisited` V ON C.country_name = V.country_name AND V.userid=1 LIMIT 100
 $query = "SELECT id, country_name Country, capital Capital, population Population, from_api `From API` FROM Countries WHERE is_active=1 AND ";
 $sname = "";
 $scap = "";
