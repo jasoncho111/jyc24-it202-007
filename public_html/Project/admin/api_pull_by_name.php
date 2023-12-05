@@ -12,6 +12,8 @@ $rapidapihost = "geography4.p.rapidapi.com";
 $cname = "";
 $offset = 0;
 $records = [];
+//pull data from API
+//jyc24 - 12/4/23
 if(isset($_POST["name"]) && isset($_POST["offset"])) {
     $cname = se($_POST, "name", "", false);
     $offset = se($_POST, "offset", 0, false);
@@ -52,7 +54,7 @@ if(isset($_POST["name"]) && isset($_POST["offset"])) {
                     array_push($namelist, $country["cname"]);
                 }
 
-                //Delete all entries, insert all new entries:
+                //(Duplicate data handling) Delete all old repeat entries, insert all new entries:
                 //TODO: Keep country ids constant
 
                 $query = "DELETE FROM Countries WHERE ";

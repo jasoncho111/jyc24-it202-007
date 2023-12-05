@@ -1,6 +1,5 @@
 <?php
 if (!isset($total)) {
-    flash("Not set");
     $total = 1;
 }
 

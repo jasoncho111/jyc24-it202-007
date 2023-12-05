@@ -45,6 +45,8 @@ try{
 
 $table = ["data" => $country];
 
+//deletion logic
+//jyc24, 12-4-23
 if(isset($_POST["deltype"])) {
     $deltype = $_POST["deltype"];
     if ($deltype == "soft") {

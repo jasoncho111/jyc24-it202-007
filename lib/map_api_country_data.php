@@ -1,5 +1,7 @@
 <?php
 
+//data mapping to table
+//jyc24 - 12/4/23
 function map_data($api_data) {
     $records = [];
     foreach($api_data as $entry) {

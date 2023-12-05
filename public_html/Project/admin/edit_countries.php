@@ -41,6 +41,7 @@ if (isset($_POST["name"]) && isset($_POST["capital"]) && isset($_POST["currency"
         $active = $_POST["is-active"];
 
         //validation
+        //jyc24 - 12/4/23
         if(empty($name) || empty($capital) || empty($currency)) flash("All fields are reqiuired", "warning");
         else if(!preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $name) || !preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?|[,][\s]?)[a-zA-Z]+[\.]?)*$/', $capital) || !preg_match('/^[a-zA-Z]+(([\-\s]|[\.][\s]?)[a-zA-Z]+[\.]?)*$/', $currency)) flash("Countries, capitals, and currencies must be alphabetical (hyphens permitted)", "warning");
         else if($un > 1 || $un < 0 || $independent < 0 || $independent > 1 || $real > 1 || $real < 0 || $active > 1 || $active < 0) flash("Independent, UN Member, is real, and is active must have a value of either 1 or 0", "warning");
