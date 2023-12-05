@@ -6,31 +6,31 @@ reset_session();
     <table class="forms-table">
         <tr>
             <div>
-                <td><label for="email">Email:</label></td>
-                <td><input type="email" name="email" required /></td>
+                <td><label for="email" class="form-label">Email:</label></td>
+                <td><input type="email" name="email" required class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div>
-                <td><label for="username">Username:</label></td>
-                <td><input type="text" id= "username" name="username" required maxlength="30" /></td>
+                <td><label for="username" class="form-label">Username:</label></td>
+                <td><input type="text" id= "username" name="username" required maxlength="30" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div>
-                <td><label for="pw">Password:</label></td>
-                <td><input type="password" id="pw" name="password" required minlength="8" /></td>
+                <td><label for="pw" class="form-label">Password:</label></td>
+                <td><input type="password" id="pw" name="password" required minlength="8" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div>
-                <td><label for="confirm">Confirm:</label></td>
-                <td><input type="password" name="confirm" required minlength="8" /></td>
+                <td><label for="confirm" class="form-label">Confirm:</label></td>
+                <td><input type="password" name="confirm" required minlength="8" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Register" /></td>
+            <td><input type="submit" value="Register" class="btn btn-primary" /></td>
         </tr>
     </table>
 </form>

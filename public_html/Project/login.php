@@ -5,19 +5,19 @@ require(__DIR__ . "/../../partials/nav.php");
     <table class="forms-table">
         <tr>
             <div>
-                <td><label for="email">Email/Username:</label></td>
-                <td><input type="text" name="email" required /></td>
+                <td><label for="email" class="form-label">Email/Username:</label></td>
+                <td><input type="text" name="email" required class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div>
-                <td><label for="pw">Password:</label></td>
-                <td><input type="password" id="pw" name="password" required minlength="8" /></td>
+                <td><label for="pw" class="form-label">Password:</label></td>
+                <td><input type="password" id="pw" name="password" required minlength="8" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Login" /></td>
+            <td><input type="submit" value="Login" class="btn btn-primary" /></td>
         </tr>
     </table>
 </form>
@@ -110,7 +110,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
                             $_SESSION["user"]["roles"] = []; //no roles
                         }
                         flash("Welcome, " . get_username());
-                        die(header("Location: home.php"));
+                        redirect('home.php');
                     } else {
                         flash("Invalid password");
                     }
