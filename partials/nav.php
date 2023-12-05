@@ -24,26 +24,33 @@ session_start();
 
 
 ?>
+<!-- include bootstrap css and js references -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
 <!-- include css and js files -->
 <link rel="stylesheet" href="<?php echo get_url('styles.css'); ?>">
 <script src="<?php echo get_url('helpers.js'); ?>"></script>
 <nav>
     <ul>
         <?php if (is_logged_in()) : ?>
-            <li><a href="<?php echo get_url('home.php'); ?>">Home</a></li>
-            <li><a href="<?php echo get_url('profile.php'); ?>">Profile</a></li>
+            <li onclick="location.replace('<?php echo get_url('home.php')?>');"><a href="<?php echo get_url('home.php'); ?>">Home</a></li>
+            <li onclick="location.replace('<?php echo get_url('profile.php')?>');"><a href="<?php echo get_url('profile.php'); ?>">Profile</a></li>
         <?php endif; ?>
         <?php if (!is_logged_in()) : ?>
-            <li><a href="<?php echo get_url('login.php'); ?>">Login</a></li>
-            <li><a href="<?php echo get_url('register.php'); ?>">Register</a></li>
+            <li onclick="location.replace('<?php echo get_url('login.php')?>');"><a href="<?php echo get_url('login.php'); ?>">Login</a></li>
+            <li onclick="location.replace('<?php echo get_url('register.php')?>');"><a href="<?php echo get_url('register.php'); ?>">Register</a></li>
         <?php endif; ?>
         <?php if (has_role("Admin")) : ?>
-            <li><a href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
-            <li><a href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
-            <li><a href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
+            <li onclick="location.replace('<?php echo get_url('admin/create_role.php')?>');"><a href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
+            <li onclick="location.replace('<?php echo get_url('admin/list_roles.php')?>');"><a href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
+            <li onclick="location.replace('<?php echo get_url('admin/assign_roles.php')?>');"><a href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
+            <li onclick="location.replace('<?php echo get_url('admin/create_edit_countries.php')?>');"><a href="<?php echo get_url('admin/create_edit_countries.php'); ?>">Create Countries</a></li>
+            <li onclick="location.replace('<?php echo get_url('admin/api_pull_index.php')?>');"><a href="<?php echo get_url('admin/api_pull_index.php'); ?>">API Manual Pull</a></li>
         <?php endif; ?>
         <?php if (is_logged_in()) : ?>
-            <li><a href="<?php echo get_url('logout.php'); ?>">Logout</a></li>
+            <li onclick="location.replace('<?php echo get_url('list_countries.php')?>');"><a href="<?php echo get_url('list_countries.php'); ?>">Country List</a></li>
+            <li onclick="location.replace('<?php echo get_url('logout.php')?>');"><a href="<?php echo get_url('logout.php'); ?>">Logout</a></li>
         <?php endif; ?>
     </ul>
 </nav>

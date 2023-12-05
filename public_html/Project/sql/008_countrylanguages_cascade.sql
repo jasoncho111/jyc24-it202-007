@@ -1,0 +1,1 @@
+ALTER TABLE `CountryLanguages` ADD CONSTRAINT FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE

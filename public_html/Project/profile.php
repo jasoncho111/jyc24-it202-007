@@ -97,14 +97,14 @@ $username = get_username();
     <table class="forms-table">
         <tr>
             <div class="mb-3">
-                <td><label for="email">Email</label></td>
-                <td><input type="email" name="email" id="email" value="<?php se($email); ?>" /></td>
+                <td><label for="email" class="form-label">Email</label></td>
+                <td><input type="email" name="email" id="email" value="<?php se($email); ?>" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div class="mb-3">
-                <td><label for="username">Username</label></td>
-                <td><input type="text" name="username" id="username" value="<?php se($username); ?>" /></td>
+                <td><label for="username" class="form-label">Username</label></td>
+                <td><input type="text" name="username" id="username" value="<?php se($username); ?>" class="form-control" /></td>
             </div>
         </tr>
         <!-- DO NOT PRELOAD PASSWORD -->
@@ -114,25 +114,25 @@ $username = get_username();
         </tr>
         <tr>
             <div class="mb-3">
-                <td><label for="cp">Current Password</label></td>
-                <td><input type="password" name="currentPassword" id="cp" /></td>
+                <td><label for="cp" class="form-label">Current Password</label></td>
+                <td><input type="password" name="currentPassword" id="cp" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div class="mb-3">
-                <td><label for="np">New Password</label></td>
-                <td><input type="password" name="newPassword" id="np" /></td>
+                <td><label for="np" class="form-label">New Password</label></td>
+                <td><input type="password" name="newPassword" id="np" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <div class="mb-3">
-                <td><label for="conp">Confirm Password</label></td>
-                <td><input type="password" name="confirmPassword" id="conp" /></td>
+                <td><label for="conp" class="form-label">Confirm Password</label></td>
+                <td><input type="password" name="confirmPassword" id="conp" class="form-control" /></td>
             </div>
         </tr>
         <tr>
             <td></td>
-            <td><input type="submit" value="Update Profile" name="save" /></td>
+            <td><input type="submit" value="Update Profile" name="save" class="btn btn-primary" /></td>
         </tr>
     </table>
 </form>

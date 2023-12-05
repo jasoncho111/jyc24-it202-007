@@ -4,7 +4,7 @@ require(__DIR__ . "/../../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-    die(header("Location: " . get_url("home.php")));
+    redirect('home.php');
 }
 
 if (isset($_POST["name"]) && isset($_POST["description"])) {
@@ -31,14 +31,14 @@ if (isset($_POST["name"]) && isset($_POST["description"])) {
 <h1>Create Role</h1>
 <form method="POST">
     <div>
-        <label for="name">Name</label>
-        <input id="name" name="name" required />
+        <label for="name" class="form-label">Name</label>
+        <input id="name" name="name" required class="form-control" />
     </div>
     <div>
-        <label for="d">Description</label>
-        <textarea name="description" id="d"></textarea>
+        <label for="d" class="form-label">Description</label>
+        <textarea name="description" id="d" class="form-control"></textarea>
     </div>
-    <input type="submit" value="Create Role" />
+    <input type="submit" value="Create Role" class="btn btn-primary" />
 </form>
 <?php
 //note we need to go up 1 more directory

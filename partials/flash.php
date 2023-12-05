@@ -10,7 +10,6 @@
                 <div class="alert alert-<?php se($msg, 'color', 'info'); ?>" role="alert"><?php se($msg, "text", ""); ?></div>
             </div>
         <?php endforeach; ?>
-        <br>
     <?php endif; ?>
 </div>
 <script>
