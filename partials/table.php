@@ -45,6 +45,7 @@
 
     $_visit_assoc_col = isset($data["visit_column"]) ? $data["visit_column"] : ""; //should be a string
     $_visit_assoc_url = isset($data["visit_assoc_url"]) ? $data["visit_assoc_url"] : "";
+    $_visit_key_col = isset($data["visit_key_col"]) ? $data["visit_key_col"] : "";
 
     ?>
     <?php if ($_title) : ?>
@@ -72,11 +73,11 @@
                                 <?php else : ?>
                                     <?php if($v == NULL) : ?>
                                         <td>
-                                            <a href="<?php se($_visit_assoc_url); ?>?<?php se($_visit_assoc_col); ?>=<?php se($row, $_visit_assoc_col); ?>&intent=del<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-primary">Mark as visited</a>
+                                            <a href="<?php se($_visit_assoc_url); ?>?key=<?php se($row, $_visit_key_col); ?>&intent=add<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-primary">Mark as visited</a>
                                         </td>
                                     <?php else : ?>
                                         <td>
-                                            <a href="<?php se($_visit_assoc_url); ?>?<?php se($_visit_assoc_col); ?>=<?php se($row, $_visit_assoc_col); ?>&intent=add<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-danger">Mark as not visited</a>
+                                            <a href="<?php se($_visit_assoc_url); ?>?key=<?php se($row, $_visit_key_col); ?>&intent=del<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-danger">Mark as not visited</a>
                                         </td>
                                     <?php endif; ?>
                                 <?php endif; ?>
