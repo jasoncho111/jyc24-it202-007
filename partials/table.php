@@ -43,6 +43,9 @@
         });
     }
 
+    $_visit_assoc_col = isset($data["visit_column"]) ? $data["visit_column"] : ""; //should be a string
+    $_visit_assoc_url = isset($data["visit_assoc_url"]) ? $data["visit_assoc_url"] : "";
+
     ?>
     <?php if ($_title) : ?>
         <h3><?php se($title); ?></h3>
@@ -62,9 +65,21 @@
             <?php if (is_array($_data) && count($_data) > 0) : ?>
                 <?php foreach ($_data as $row) : ?>
                     <tr>
-                        <?php foreach (array_values($row) as $v) : ?>
-                            <?php if (!in_array($v, $_ignored_columns)) : ?>
-                                <td><?php se($v); ?></td>
+                        <?php foreach ($row as $k => $v) : ?>
+                            <?php if (!in_array($k, $_ignored_columns)) : ?>
+                                <?php if($k != $_visit_assoc_col) : ?>
+                                    <td><?php se($v); ?></td>
+                                <?php else : ?>
+                                    <?php if($v == NULL) : ?>
+                                        <td>
+                                            <a href="<?php se($_visit_assoc_url); ?>?<?php se($_visit_assoc_col); ?>=<?php se($row, $_visit_assoc_col); ?>&intent=del<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-primary">Mark as visited</a>
+                                        </td>
+                                    <?php else : ?>
+                                        <td>
+                                            <a href="<?php se($_visit_assoc_url); ?>?<?php se($_visit_assoc_col); ?>=<?php se($row, $_visit_assoc_col); ?>&intent=add<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-danger">Mark as not visited</a>
+                                        </td>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             <?php endif; ?>
                         <?php endforeach; ?>
                         <?php if ($_has_atleast_one_url) : ?>

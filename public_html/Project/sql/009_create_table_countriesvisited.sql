@@ -8,6 +8,6 @@ CREATE TABLE IF NOT EXISTS  `CountriesVisited`
     `modified`   timestamp default current_timestamp on update current_timestamp,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`userid`) REFERENCES Users(`id`) ON DELETE CASCADE,
-    FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE,
+    FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE KEY (`userid`, `country_name`)
 )

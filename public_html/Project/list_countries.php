@@ -5,7 +5,8 @@ is_logged_in(true);
 global $total;
 //SELECT STATEMENT FOR COUNTRY ASSOCIATION 
 //SELECT C.country_name, V.userid FROM `Countries` C LEFT JOIN `CountriesVisited` V ON C.country_name = V.country_name AND V.userid=1 LIMIT 100
-$query = "SELECT id, country_name Country, capital Capital, population Population, from_api `From API` FROM Countries WHERE is_active=1 AND ";
+$userid = get_user_id();
+$query = "SELECT C.id, C.country_name Country, C.capital Capital, C.population Population, C.from_api `From API`, V.userid `Change Visited Status` FROM Countries C LEFT JOIN CountriesVisited V ON C.country_name = V.country_name AND V.userid=$userid WHERE is_active=1 AND ";
 $sname = "";
 $scap = "";
 $slim = 10;
@@ -96,7 +97,7 @@ else {
 //construct redirect location for delete for query persisting
 $queryparams = http_build_query($_GET);
 
-$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php", "persist" => $queryparams];
+$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php", "persist" => $queryparams, "visit_column" => "Change Visited Status", "visit_assoc_url" => "user_visit_assoc.php"];
 ?>
 
 

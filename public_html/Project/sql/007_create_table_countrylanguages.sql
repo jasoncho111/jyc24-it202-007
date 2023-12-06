@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS  `CountryLanguages`
     `created`    timestamp default current_timestamp,
     `modified`   timestamp default current_timestamp on update current_timestamp,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`),
+    FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE ON UPDATE CASCADE,
     UNIQUE KEY (`country_name`, `language`)
 )
