@@ -7,7 +7,6 @@ if (!has_role("Admin")) {
 }
 
 $id = -1;
-$persisted = "";
 if(isset($_GET["id"])) {
     $id = se($_GET, "id", -1, false); 
     //unset so we don't accidentally persist id
