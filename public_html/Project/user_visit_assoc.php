@@ -26,6 +26,25 @@ else {
 $persisted = http_build_query($_GET);
 if ($paramsNotSet) redirect("list_countries.php?$persisted");
 
+$userid = get_user_id();
+$query = "";
+if($intent == "add") {
+    $query = "INSERT INTO CountriesVisited(userid, country_name) VALUES($userid, :country)";
+}
+else if ($intent == "del") {
+    $query = "DELETE FROM CountriesVisited WHERE userid=$userid AND country_name=:country";
+}
+
+$db = getDB();
+$stmt = $db->prepare($query);
+try {
+    $stmt->execute([":country" => $key]);
+    flash("Successfully changed visitation status of $key", "success");
+} catch (PDOException $e) {
+    flash(var_export($e->errorInfo, true), "danger");
+}
+
+redirect("list_countries.php?$persisted#tableScroll");
 
 require(__DIR__ . "/../../partials/flash.php");
 ?>

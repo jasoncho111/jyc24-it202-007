@@ -101,9 +101,6 @@ $queryparams = http_build_query($_GET);
 $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php", "persist" => $queryparams, "visit_column" => "Change Visited Status", "visit_assoc_url" => "user_visit_assoc.php", "visit_key_col" => "Country"];
 ?>
 
-
-
-
 <div class="container-fluid">
     <h1>Countries List</h1>
     <?php render_button(["type" => "button", "text" => "Clear filters", "onclick" => "clearFilters()", "color" => "secondary btn-sm"]); ?>
@@ -128,7 +125,9 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <?php endif; ?>
             <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
-    <?php render_table($table);?>
+    <div id="tableScroll">
+        <?php render_table($table);?>
+    </div>
     <div class="row">
         <?php include(__DIR__ . "/../../partials/pagination_nav.php"); ?>
     </div>
