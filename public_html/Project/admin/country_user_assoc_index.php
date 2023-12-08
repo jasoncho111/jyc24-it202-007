@@ -7,12 +7,14 @@ if (!has_role("Admin")) {
 }
 ?>
 
-<h1>Manual API Pull</h1>
-<br>
-<a href="api_pull_by_name.php" class="btn btn-primary">Associate Users to Countries</a>
-<br>
-<br>
-<p>More options may eventually be added.</p>
+<div class="container-fluid">
+    <h1>Admin Country User Association Actions</h1>
+    <br>
+    <a href="assoc_user_country.php" class="btn btn-primary">Associate Users to Countries</a>
+    <br>
+    <br>
+    <p>More options may eventually be added.</p>
+</div>
 
 <?php
 require(__DIR__ . "/../../../partials/flash.php");
