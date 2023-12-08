@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS  `CountriesVisited`
     `country_name`    VARCHAR(255) NOT NULL,
     `created`    timestamp default current_timestamp,
     `modified`   timestamp default current_timestamp on update current_timestamp,
+    `do_delete` TINYINT DEFAULT 0,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`userid`) REFERENCES Users(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE ON UPDATE CASCADE,
