@@ -110,7 +110,7 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
     <form method="GET">
         <?php render_input(["type" => "search", "name" => "name", "label" => "Country Name", "placeholder" => "Name Filter", "value"=>$sname]);/*lazy value to check if form submitted, not ideal*/ ?>
         <?php render_input(["type" => "search", "name" => "capital", "label" => "Country Capital", "placeholder" => "Capital Filter", "value"=>$scap]); ?>
-        <?php render_input(["type" => "number", "name" => "lim", "label" => "Max results per page", "placeholder" => "Limit", "value"=>$slim, "rules" => ["required" => true, "min" => 1, "max" => 100]]) ?>;
+        <?php render_input(["type" => "number", "name" => "lim", "label" => "Max results per page", "placeholder" => "Limit", "value"=>$slim, "rules" => ["required" => true, "min" => 1, "max" => 100]]); ?>
         <p>Order by:</p>
         <?php render_input(["type" => "radio", "name" => "order", "label" => "Ascending", "value" => "ASC", "rules" => ($order == "ASC" ? ["checked" => true] : [])]); ?>
         <?php render_input(["type" => "radio", "name" => "order", "label" => "Descending", "value" => "DESC", "rules" => ($order == "DESC" ? ["checked" => true] : [])]); ?>
