@@ -76,6 +76,20 @@ if(isset($_GET["cname"]) && isset($_GET["username"]) && isset($_GET["lim"])) {
 
 //DELETE GOES HERE
 //CHECK POST VARIABLE DELETE=TRUE
+if (isset($_POST["delete"])) {
+    $delete = $_POST["delete"];
+    unset($_POST["delete"]);
+    if($delete == "true") {
+        $stmt = $db->prepare($delquery);
+        try{
+            $stmt->execute([":cname" => "%$scname%"]);
+            flash("Successfully deleted all associations shown", "success");
+        } catch (PDOException $e) {
+            flash(var_export($e->errorInfo, true), "danger");
+        }
+    }
+    
+}
 
 $query .= " GROUP BY V.country_name ORDER BY V.country_name ASC LIMIT $slim";
 
