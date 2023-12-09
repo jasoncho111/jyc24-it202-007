@@ -74,7 +74,8 @@ if(isset($_GET["cname"]) && isset($_GET["username"]) && isset($_GET["lim"])) {
     }
 }
 
-var_export($delquery);
+//DELETE GOES HERE
+//CHECK POST VARIABLE DELETE=TRUE
 
 $query .= " GROUP BY V.country_name ORDER BY V.country_name ASC LIMIT $slim";
 
