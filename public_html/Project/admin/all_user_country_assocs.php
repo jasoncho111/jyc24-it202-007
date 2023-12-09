@@ -8,26 +8,11 @@ if (!has_role("Admin")) {
 
 //DELETES MUST HAPPEN FIRST 
 
-//MAP USERS TO THEIR IDS
-$query = "SELECT "
+$db = getDB();
+
 // $query = "SELECT V.country_name Country, GROUP_CONCAT(' ', U.username) Users, A.`Total Users` FROM `CountriesVisited` V, Users U, 
 //             (SELECT V.country_name, COUNT(U.username) `Total Users` FROM CountriesVisited V, Users U WHERE V.userid=U.id GROUP BY V.country_name) A 
 //             WHERE V.country_name=A.country_name AND V.userid=U.id AND U.username LIKE '%a%' GROUP BY V.country_name LIMIT 0,100";
-
-$totalquery = "SELECT COUNT(DISTINCT country_name) total FROM CountriesVisited";
-$total = 0;
-$db = getDB();
-$stmt = $db->prepare($totalquery);
-try {
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    if($results) {
-        $total = $results[0]["total"];
-    }
-    else $total = 0;
-} catch (PDOException $e) {
-    flash(var_export($e->errorInfo, true), "danger");
-}
 
 $query = "SELECT V.country_name Country, GROUP_CONCAT(' ', U.username) Users, COUNT(U.username) `Total Users` FROM CountriesVisited V, Users U WHERE V.userid=U.id";
 $scname = "";
@@ -57,12 +42,40 @@ if(isset($_GET["cname"]) && isset($_GET["username"]) && isset($_GET["lim"])) {
         $filtered = true;
     }
     if(!empty($suname)) {
+        //create mapping first to map users to ids
+        $mappingquery = "SELECT id, username FROM Users WHERE username LIKE :username";
+        $stmt = $db->prepare($mappingquery);
+        $users = [];
+        try {
+            $stmt->execute([":username" => "%$suname%"]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if($results) {
+                foreach($results as $user) {
+                    $users[$user["username"]] = $user["id"];
+                }
+            }
+        } catch (PDOException $e) {
+            flash(var_export($e->errorInfo, true), "danger");
+        }
+
         $query .= " AND U.username LIKE :username";
-        $delquery .= "TBD";
+
+        if(count($users) > 0) {
+            $delquery .= " AND (";
+            foreach($users as $id) {
+                $delquery .= "userid=$id OR ";
+            }
+            $delquery = substr($delquery, 0, strlen($delquery)-4);
+            $delquery .= ")";
+        }
+
         $params[":username"] = "%$suname%";
         $filtered = true;
     }
 }
+
+var_export($delquery);
+
 $query .= " GROUP BY V.country_name ORDER BY V.country_name ASC LIMIT $slim";
 
 $stmt = $db->prepare($query);
@@ -76,6 +89,20 @@ try{
     else {
         flash("No matches found", "warning");
     }
+} catch (PDOException $e) {
+    flash(var_export($e->errorInfo, true), "danger");
+}
+
+$totalquery = "SELECT COUNT(DISTINCT country_name) total FROM CountriesVisited";
+$total = 0;
+$stmt = $db->prepare($totalquery);
+try {
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if($results) {
+        $total = $results[0]["total"];
+    }
+    else $total = 0;
 } catch (PDOException $e) {
     flash(var_export($e->errorInfo, true), "danger");
 }
@@ -97,6 +124,12 @@ $table = ["data" => $data];
     <h6>Total countries associated: <?php se($total); ?><br>
     Total countries shown: <?php se(count($data)); ?></h6>
     <?php render_table($table); ?>
+    <?php if ($filtered) : ?>
+        <form method="POST">
+            <input type="hidden" name="delete" value="true" />
+            <?php render_button(["text" => "Delete all entries shown", "type" => "submit", "color" => "primary"]); ?>
+        </form>
+    <?php endif; ?>
 </div>
 
 
