@@ -122,7 +122,8 @@ try {
     flash(var_export($e->errorInfo, true), "danger");
 }
 
-$table = ["data" => $data];
+$persisted = http_build_query($_GET);
+$table = ["data" => $data, "profile_column" => "Users", "delete_url" => "delete_user_country_assoc.php", "delete_label" => "Delete Association", "view_url" => "view_user_country_assoc.php", "view_label" => "View Association", "primary_key" => "Country", "persist" => $persisted];
 ?>
 
 <div class="container-fluid">
