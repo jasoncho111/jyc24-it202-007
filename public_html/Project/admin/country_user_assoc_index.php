@@ -16,6 +16,9 @@ if (!has_role("Admin")) {
     <a href="all_user_country_assocs.php" class="btn btn-primary">View All Associated Users and Countries</a>
     <br>
     <br>
+    <a href="countries_not_associated_list.php" class="btn btn-primary">View All Unassociated Countries</a>
+    <br>
+    <br>
     <p>More options may eventually be added.</p>
 </div>
 
