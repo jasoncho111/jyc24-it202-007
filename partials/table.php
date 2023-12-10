@@ -47,6 +47,8 @@
     $_visit_assoc_url = isset($data["visit_assoc_url"]) ? $data["visit_assoc_url"] : "";
     $_visit_key_col = isset($data["visit_key_col"]) ? $data["visit_key_col"] : "";
 
+    $_profile_column = isset($data["profile_column"]) ? $data["profile_column"] : "";
+    $_profile_url = isset($data["profile_url"]) ? $data["profile_url"] : get_url("admin/admin_profile_view.php");
     ?>
     <?php if ($_title) : ?>
         <h3><?php se($_title); ?></h3>
@@ -68,8 +70,25 @@
                     <tr>
                         <?php foreach ($row as $k => $v) : ?>
                             <?php if (!in_array($k, $_ignored_columns)) : ?>
-                                <?php if($k != $_visit_assoc_col) : ?>
+                                <?php if($k != $_visit_assoc_col && $k != $_profile_column) : ?>
                                     <td><?php se($v); ?></td>
+                                <?php elseif ($k == $_profile_column) : ?>
+                                    <td>
+                                        <?php 
+                                            //$v should be a comma separated string
+                                            $users = explode(", ", $v);
+                                            $num = count($users);
+                                            for($i = 0; $i < $num; $i++) {
+                                                $users[$i] = trim($users[$i]);
+                                            }
+                                            $i = 1;
+                                            foreach($users as $u) {
+                                                echo "<a href='$_profile_url?user=$u&$_persisted_queries'>$u</a>";
+                                                if($i != $num) echo ", ";
+                                                $i++;
+                                            }
+                                        ?>
+                                    </td>
                                 <?php else : ?>
                                     <?php if($v == NULL) : ?>
                                         <td>
