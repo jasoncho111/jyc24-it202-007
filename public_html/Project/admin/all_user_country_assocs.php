@@ -31,6 +31,8 @@ if(isset($_GET["cname"]) && isset($_GET["username"]) && isset($_GET["lim"])) {
         flash("Limit filter must be between 1 and 100 inclusive", "warning");
     }
 
+    //jyc24 12/10/23
+    //complex sql query to handle the table
     $query = "SELECT V.country_name Country, GROUP_CONCAT(' ', U.username) Users, A.`Total Users` FROM `CountriesVisited` V, Users U, 
                  (SELECT V.country_name, COUNT(U.username) `Total Users` FROM CountriesVisited V, Users U WHERE V.userid=U.id GROUP BY V.country_name) A 
                  WHERE V.country_name=A.country_name AND V.userid=U.id";

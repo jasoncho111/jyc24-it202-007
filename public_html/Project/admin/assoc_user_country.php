@@ -127,6 +127,7 @@ if(!empty($username) && !empty($country)) {
         <?php render_button(["text" => "Search", "type" => "submit"]); ?>
     </form>
     <br>
+    <!-- jyc24 12-10-23 table logic -->
     <h3>Change Associations</h3>
     <form method="POST">
         <?php if (isset($username) && !empty($username) && isset($country) && !empty($country)) : ?>
