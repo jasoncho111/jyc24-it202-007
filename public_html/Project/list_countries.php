@@ -3,7 +3,10 @@ require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
 global $total;
-$query = "SELECT id, country_name Country, capital Capital, population Population, from_api `From API` FROM Countries WHERE is_active=1 AND ";
+//SELECT STATEMENT FOR COUNTRY ASSOCIATION 
+//SELECT C.country_name, V.userid FROM `Countries` C LEFT JOIN `CountriesVisited` V ON C.country_name = V.country_name AND V.userid=1 LIMIT 100
+$userid = get_user_id();
+$query = "SELECT C.id, C.country_name Country, capital Capital, population Population, from_api `From API`, V.userid `Change Visited Status` FROM Countries C LEFT JOIN CountriesVisited V ON C.country_name = V.country_name AND V.userid=$userid WHERE is_active=";
 $sname = "";
 $scap = "";
 $slim = 10;
@@ -13,39 +16,40 @@ $inactive = [];
 $params = [];
 $page = se($_GET, "page", 1, false);
 if(isset($_GET["inactive"]) && count($_GET["inactive"]) == 1) {
-    $inactive = $_GET["inactive"][0];
-    $query = substr($query, 0, strlen($query) -6);
-    $query .= "is_active AND ";
+    $query .= "is_active";
 }
+else {
+    $query .= "1";
+}
+
 if(isset($_GET["name"]) || isset($_GET["capital"]) || (isset($_GET["type"]) && count($_GET["type"]) == 1)) {
     if(isset($_GET["name"]) && !empty($_GET["name"])) {
         $sname = se($_GET, "name", "", false);
-        $query .= "country_name LIKE :sname AND ";
+        $query .= " AND C.country_name LIKE :sname";
         $params[":sname"] = "%$sname%";
     }
     if(isset($_GET["capital"]) && !empty($_GET["capital"])) {
         $scap = se($_GET, "capital", "", false);
-        $query .= "capital LIKE :scap AND ";
+        $query .= " AND C.capital LIKE :scap";
         $params[":scap"] = "%$scap%";
     }
     if(isset($_GET["type"]) && count($_GET["type"]) == 1) {
         $real = $_GET["type"][0];
-        $query .= "is_real=";
+        $query .= " AND is_real=";
         if($real == "real") {
-            $query .= "1 AND ";
+            $query .= "1";
         }
         else {
-            $query .= "0 AND ";
+            $query .= "0";
         }
     }
 }
-$query = substr($query, 0, strlen($query) -5);
-//trailing " AND " removed
+
 //before order by clause, get $total
-$totalquery = "SELECT COUNT(id) total FROM Countries " . substr($query, strpos($query, "WHERE"));
+$totalquery = "SELECT COUNT(id) total FROM Countries C " . substr($query, strpos($query, "WHERE"));
 if(isset($_GET["order"])) {
     $order = se($_GET, "order", "", false);
-    $query .= " ORDER BY country_name $order";
+    $query .= " ORDER BY C.country_name $order";
 }
 if(isset($_GET["lim"])) {
     $slim = se($_GET, "lim", "", false);
@@ -94,11 +98,8 @@ else {
 //construct redirect location for delete for query persisting
 $queryparams = http_build_query($_GET);
 
-$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php", "persist" => $queryparams];
+$table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url" => "view_country.php", "edit_url" => "admin/edit_countries.php", "persist" => $queryparams, "visit_column" => "Change Visited Status", "visit_assoc_url" => "user_visit_assoc.php", "visit_key_col" => "Country"];
 ?>
-
-
-
 
 <div class="container-fluid">
     <h1>Countries List</h1>
@@ -109,7 +110,7 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
     <form method="GET">
         <?php render_input(["type" => "search", "name" => "name", "label" => "Country Name", "placeholder" => "Name Filter", "value"=>$sname]);/*lazy value to check if form submitted, not ideal*/ ?>
         <?php render_input(["type" => "search", "name" => "capital", "label" => "Country Capital", "placeholder" => "Capital Filter", "value"=>$scap]); ?>
-        <?php render_input(["type" => "number", "name" => "lim", "label" => "Max results per page", "placeholder" => "Limit", "value"=>$slim, "rules" => ["required" => true, "min" => 1, "max" => 100]]) ?>;
+        <?php render_input(["type" => "number", "name" => "lim", "label" => "Max results per page", "placeholder" => "Limit", "value"=>$slim, "rules" => ["required" => true, "min" => 1, "max" => 100]]); ?>
         <p>Order by:</p>
         <?php render_input(["type" => "radio", "name" => "order", "label" => "Ascending", "value" => "ASC", "rules" => ($order == "ASC" ? ["checked" => true] : [])]); ?>
         <?php render_input(["type" => "radio", "name" => "order", "label" => "Descending", "value" => "DESC", "rules" => ($order == "DESC" ? ["checked" => true] : [])]); ?>
@@ -124,7 +125,9 @@ $table = ["data" => $data, "delete_url" => "admin/delete_country.php", "view_url
         <?php endif; ?>
             <?php render_button(["text" => "Search", "type" => "submit", "color" => "primary"]); ?>
     </form>
-    <?php render_table($table);?>
+    <div id="tableScroll">
+        <?php render_table($table);?>
+    </div>
     <div class="row">
         <?php include(__DIR__ . "/../../partials/pagination_nav.php"); ?>
     </div>

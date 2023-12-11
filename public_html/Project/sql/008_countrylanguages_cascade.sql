@@ -1,1 +1,1 @@
-ALTER TABLE `CountryLanguages` ADD CONSTRAINT FOREIGN KEY (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE
+-- ALTER TABLE `CountryLanguages` ADD CONSTRAINT IF NOT EXISTS FOREIGN KEY country_name_cascade_delete_update (`country_name`) REFERENCES Countries(`country_name`) ON DELETE CASCADE ON UPDATE CASCADE

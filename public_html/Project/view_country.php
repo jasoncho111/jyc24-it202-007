@@ -8,6 +8,11 @@ if(isset($_GET["id"])) {
     //unset to prevent accidental persisting
     unset($_GET["id"]);
 }
+$from = "";
+if(isset($_GET["from"])) {
+    $from = se($_GET, "from", "", false);
+    unset($_GET["from"]);
+}
 
 $persisted = http_build_query($_GET);
 if($id < 1) {
@@ -55,7 +60,11 @@ $ltable = ["data" => $languages];
     <br>
     <br>
     <h4>Other actions</h4>
-    <?php echo "<a href=" . get_url("list_countries.php?$persisted") . " class=\"btn btn-primary\">Back To Country List</a>" ?>
+    <?php if(empty($from)) : ?>
+        <?php echo "<a href=" . get_url("list_countries.php?$persisted") . " class=\"btn btn-primary\">Back To Country List</a>" ?>
+    <?php elseif($from == "noassoc") : ?>
+        <a href="admin/countries_not_associated_list.php?<?php se($persisted) ?>" class="btn btn-primary">Back to Unassociated Country List</a>
+    <?php endif; ?>
     <?php if(has_role("Admin")) : ?>
         <br><br>
         <?php echo "<a href=" . get_url("admin/edit_countries.php?id=$id") . " class=\"btn btn-secondary\">Edit</a>" ?>

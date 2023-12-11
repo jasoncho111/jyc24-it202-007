@@ -43,9 +43,16 @@
         });
     }
 
+    $_visit_assoc_col = isset($data["visit_column"]) ? $data["visit_column"] : ""; //should be a string
+    $_visit_assoc_url = isset($data["visit_assoc_url"]) ? $data["visit_assoc_url"] : "";
+    $_visit_key_col = isset($data["visit_key_col"]) ? $data["visit_key_col"] : "";
+
+    $_profile_column = isset($data["profile_column"]) ? $data["profile_column"] : "";
+    $_profile_url = isset($data["profile_url"]) ? $data["profile_url"] : get_url("admin/admin_profile_view.php");
+    $_from_query = isset($data["from_query"]) ? $data["from_query"] : "";
     ?>
     <?php if ($_title) : ?>
-        <h3><?php se($title); ?></h3>
+        <h3><?php se($_title); ?></h3>
     <?php endif; ?>
     <table class="table <?php se($_extra_classes); ?>">
         <?php if ($_header_override) : ?>
@@ -62,21 +69,50 @@
             <?php if (is_array($_data) && count($_data) > 0) : ?>
                 <?php foreach ($_data as $row) : ?>
                     <tr>
-                        <?php foreach (array_values($row) as $v) : ?>
-                            <?php if (!in_array($v, $_ignored_columns)) : ?>
-                                <td><?php se($v); ?></td>
+                        <?php foreach ($row as $k => $v) : ?>
+                            <?php if (!in_array($k, $_ignored_columns)) : ?>
+                                <?php if($k != $_visit_assoc_col && $k != $_profile_column) : ?>
+                                    <td><?php se($v); ?></td>
+                                <?php elseif ($k == $_profile_column) : ?>
+                                    <td>
+                                        <?php 
+                                            //$v should be a comma separated string
+                                            $users = explode(", ", $v);
+                                            $num = count($users);
+                                            for($i = 0; $i < $num; $i++) {
+                                                $users[$i] = trim($users[$i]);
+                                            }
+                                            $i = 1;
+                                            foreach($users as $u) {
+                                                echo "<a href='$_profile_url?user=$u&$_persisted_queries'>$u</a>";
+                                                if($i != $num) echo ", ";
+                                                $i++;
+                                            }
+                                        ?>
+                                    </td>
+                                <?php else : ?>
+                                    <?php if($v == NULL) : ?>
+                                        <td>
+                                            <a href="<?php se($_visit_assoc_url); ?>?key=<?php se($row, $_visit_key_col); ?>&intent=add<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-primary">Mark as visited</a>
+                                        </td>
+                                    <?php else : ?>
+                                        <td>
+                                            <a href="<?php se($_visit_assoc_url); ?>?key=<?php se($row, $_visit_key_col); ?>&intent=del<?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="btn btn-danger">Mark as not visited</a>
+                                        </td>
+                                    <?php endif; ?>
+                                <?php endif; ?>
                             <?php endif; ?>
                         <?php endforeach; ?>
                         <?php if ($_has_atleast_one_url) : ?>
                             <td>
                                 <?php if ($_view_url) : ?>
-                                    <a href="<?php se($_view_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="<?php se($_view_classes); ?>"><?php se($_view_label); ?></a>
+                                    <a href="<?php se($_view_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?><?php !empty($_from_query) ? se("&from=" . $_from_query) : se(""); ?>" class="<?php se($_view_classes); ?>"><?php se($_view_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_edit_url && has_role("Admin")) : ?>
-                                    <a href="<?php se($_edit_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="<?php se($_edit_classes); ?>"><?php se($_edit_label); ?></a>
+                                    <a href="<?php se($_edit_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?><?php !empty($_from_query) ? se("&from=" . $_from_query) : se(""); ?>" class="<?php se($_edit_classes); ?>"><?php se($_edit_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_delete_url && has_role("Admin")) : ?>
-                                    <a href="<?php se($_delete_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?>" class="<?php se($_delete_classes); ?>"><?php se($_delete_label); ?></a>
+                                    <a href="<?php se($_delete_url); ?>?<?php se($_primary_key_column); ?>=<?php se($row, $_primary_key_column); ?><?php empty($_persisted_queries) ? "" : se("&" . $_persisted_queries); ?><?php !empty($_from_query) ? se("&from=" . $_from_query) : se(""); ?>" class="<?php se($_delete_classes); ?>"><?php se($_delete_label); ?></a>
                                 <?php endif; ?>
                                 <?php if ($_post_self_form) : ?>
                                     <!-- TODO refactor -->
