@@ -19,5 +19,5 @@
 - Milestone 4
   - (add link to milestone4.md from milestone4 branch) N/A
 - Demo Link
-  - (add youtube link to unlisted or public demo) Note you'll need to verify your youtube account to upload videos > 15mins
+  - https://youtu.be/hawYElrTmNM
   
