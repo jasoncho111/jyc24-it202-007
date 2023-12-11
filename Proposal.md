@@ -13,11 +13,11 @@
 - Milestone 1
   - https://github.com/jasoncho111/jyc24-it202-007/blob/Milestone1/public_html/Project/milestone1.md
 - Milestone 2
-  - (add link to milestone2.md from milestone2 branch)
+  - https://github.com/jasoncho111/jyc24-it202-007/blob/Milestone2/public_html/Project/milestone2.md
 - Milestone 3
-  - (add link to milestone3.md from milestone3 branch)
+  - https://github.com/jasoncho111/jyc24-it202-007/blob/Milestone3/public_html/Project/milestone3.md
 - Milestone 4
-  - (add link to milestone4.md from milestone4 branch)
+  - (add link to milestone4.md from milestone4 branch) N/A
 - Demo Link
   - (add youtube link to unlisted or public demo) Note you'll need to verify your youtube account to upload videos > 15mins
   
